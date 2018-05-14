@@ -17,9 +17,6 @@
 #define TWSizeRatio           (TWScreenWidth / 375.0)
 #define TW_SizeRatio(a)       ((a) * TWSizeRatio)
 
-// 所有球的宽高
-#define BallWidthAndHeight TWScreenWidth * 0.15
-
 // MARK:- 颜色
 #define TWRandomColor [UIColor colorWithRed:arc4random()%256/255.0 green:arc4random()%256/255.0 blue:arc4random()%256/255.0 alpha:1.0]
 #define TWColorRGBA(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
