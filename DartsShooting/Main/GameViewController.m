@@ -8,13 +8,13 @@
 
 #import "GameViewController.h"
 #import "PlayScene.h"
-
+#import "TEMP.h"
 
 @implementation GameViewController
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    PlayScene * playScene = [[PlayScene alloc]initWithSize:CGSizeMake(TWScreenWidth, TWScreenHeight)];
+    TEMP * playScene = [[TEMP alloc]initWithSize:CGSizeMake(TWScreenWidth, TWScreenHeight)];
     SKView * spriteView = (SKView *)self.view;
     [spriteView presentScene:playScene];
 }

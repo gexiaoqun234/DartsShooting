@@ -20,6 +20,7 @@
 		FF6D3DD720A9662C00806197 /* AppleShooting.sks in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3DD620A9662C00806197 /* AppleShooting.sks */; };
 		FF6D3DDC20A9671100806197 /* Extern.m in Sources */ = {isa = PBXBuildFile; fileRef = FF6D3DDB20A9671100806197 /* Extern.m */; };
 		FF6D3DDF20A9678D00806197 /* PlayScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FF6D3DDE20A9678D00806197 /* PlayScene.m */; };
+		FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA33E0720ABCA82009FAC2B /* TEMP.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,8 @@
 		FF6D3DDB20A9671100806197 /* Extern.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Extern.m; sourceTree = "<group>"; };
 		FF6D3DDD20A9678D00806197 /* PlayScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayScene.h; sourceTree = "<group>"; };
 		FF6D3DDE20A9678D00806197 /* PlayScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayScene.m; sourceTree = "<group>"; };
+		FFA33E0620ABCA82009FAC2B /* TEMP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TEMP.h; sourceTree = "<group>"; };
+		FFA33E0720ABCA82009FAC2B /* TEMP.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEMP.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +137,8 @@
 				FF6D3DD120A9661500806197 /* GameScene.m */,
 				FF6D3DDD20A9678D00806197 /* PlayScene.h */,
 				FF6D3DDE20A9678D00806197 /* PlayScene.m */,
+				FFA33E0620ABCA82009FAC2B /* TEMP.h */,
+				FFA33E0720ABCA82009FAC2B /* TEMP.m */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 				FF6D3DD220A9661500806197 /* GameViewController.m in Sources */,
 				FF6D3DD420A9661500806197 /* AppDelegate.m in Sources */,
 				FF6D3DDF20A9678D00806197 /* PlayScene.m in Sources */,
+				FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */,
 				FF6D3DD520A9661500806197 /* GameScene.m in Sources */,
 				FF6D3DC620A965AD00806197 /* TreeringTurntable.m in Sources */,
 				FF6D3DB120A9276100806197 /* KnifeNode.m in Sources */,

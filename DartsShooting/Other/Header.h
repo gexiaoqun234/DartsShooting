@@ -22,4 +22,9 @@
 #define TWColorRGBA(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
 #define TWColorRGB(r,g,b) TWColorRGBA(r,g,b,1.0)
 
+// 角度转弧度
+#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
+// 弧度转角度
+#define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
+
 #endif /* Header_h */

@@ -11,6 +11,6 @@
 @interface KnifeNode : SKSpriteNode
 
 // 是否可以旋转
-@property (nonatomic, assign) BOOL isRotate;
+//@property (nonatomic, assign) BOOL isRotate;
 
 @end
