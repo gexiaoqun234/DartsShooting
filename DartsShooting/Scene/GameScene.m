@@ -15,6 +15,8 @@
 @property (nonatomic, strong) TreeringTurntable * treeringTurntable;
 @property (nonatomic, strong) NSMutableArray <KnifeNode *> * knifeNodeArray;
 @property (nonatomic, assign) BOOL allRotate;// 用来标识所有的刀是否都被发射出去了
+@property (nonatomic, strong) SKEmitterNode * appleShootingEmitter;
+@property (nonatomic, strong) SKEmitterNode * tuckedInEmitter;  // 扎进去
 @end
 
 @implementation GameScene
@@ -28,12 +30,18 @@
     // 添加第一把刀
     [self addChild:[self.knifeNodeArray firstObject]];
     _allRotate = NO;
+    
+    [self addChild:self.tuckedInEmitter];
+    [self.tuckedInEmitter setHidden:YES];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
     if (_allRotate == NO) {
-        [self.knifeNodeArray[0] runAction:[SKAction moveTo:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - (TWScreenWidth * 0.5) * 0.5 - TW_SizeRatio(74) * 0.8) duration:0.1] completion:^{
+        [self.knifeNodeArray[0] runAction:[SKAction moveTo:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - (TWScreenWidth * 0.5) * 0.5 - TW_SizeRatio(74) * 0.8) duration:0.2] completion:^{
+            
+            [self.tuckedInEmitter setHidden:NO];
+            [self.tuckedInEmitter resetSimulation];
             
             // 从当前场景移除，并且移除自带的动作
             [self.knifeNodeArray[0] removeAllActions];
@@ -145,15 +153,39 @@
     if (_knifeNodeArray == nil) {
         _knifeNodeArray = [NSMutableArray array];
         
+        // 创建刀
         for (NSInteger i = 0; i < 1000; i++) {
-            KnifeNode * knifeNode = [KnifeNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"knife00"] size:CGSizeZero];
-            knifeNode.size = CGSizeMake(44 * TWScreenWidth * 0.25 / 148, TWScreenWidth * 0.25);
+            SKTexture * texture = [SKTexture textureWithImageNamed:@"knife05"];
+            KnifeNode * knifeNode = [KnifeNode spriteNodeWithTexture:texture size:CGSizeZero];
+            knifeNode.size = CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25);
             knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(250) * 0.5);
             knifeNode.anchorPoint = CGPointMake(0.5, 1);
             [_knifeNodeArray addObject:knifeNode];
         }
+        
+        // 添加抖动动作
+        for (NSInteger i = 0; i < 1000; i++) {
+            [_knifeNodeArray[i] runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction moveToY:TW_SizeRatio(250) * 0.5 + 5 duration:1],[SKAction moveToY:TW_SizeRatio(250) * 0.5 - 5 duration:1]]]]];
+        }
     }
     return _knifeNodeArray;
 }
+
+- (SKEmitterNode *)tuckedInEmitter{
+    if (_tuckedInEmitter == nil) {
+        _tuckedInEmitter = [SKEmitterNode nodeWithFileNamed:@"TuckedIn.sks"];
+        _tuckedInEmitter.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
+    }
+    return _tuckedInEmitter;
+}
+
+- (SKEmitterNode *)appleShootingEmitter{
+    if (_appleShootingEmitter == nil) {
+        _appleShootingEmitter = [SKEmitterNode nodeWithFileNamed:@"AppleShooting.sks"];
+//        _appleShootingEmitter.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.5);
+    }
+    return _appleShootingEmitter;
+}
+
 
 @end

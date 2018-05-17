@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableArray <KnifeNode *> * knifeNodeArray;
 @property (nonatomic, assign) BOOL allRotate;           // 全部转起来
 @property (nonatomic, strong) NSMutableArray <SKAction *>* actionArray;
+
 @end
 
 @implementation TEMP
@@ -34,8 +35,6 @@
     
     
     [self.treeringTurntable runAction:[SKAction repeatActionForever:[SKAction sequence:self.actionArray]]];
-    
-    
 }
 
 -(void)update:(NSTimeInterval)currentTime{

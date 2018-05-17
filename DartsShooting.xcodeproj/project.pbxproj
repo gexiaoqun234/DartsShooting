@@ -19,6 +19,7 @@
 		FF6D3DD720A9662C00806197 /* AppleShooting.sks in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3DD620A9662C00806197 /* AppleShooting.sks */; };
 		FF6D3DDC20A9671100806197 /* Extern.m in Sources */ = {isa = PBXBuildFile; fileRef = FF6D3DDB20A9671100806197 /* Extern.m */; };
 		FF963A1720AD55830025674C /* BackgroundNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF963A1620AD55830025674C /* BackgroundNode.m */; };
+		FF963A1920AD629C0025674C /* TuckedIn.sks in Resources */ = {isa = PBXBuildFile; fileRef = FF963A1820AD629C0025674C /* TuckedIn.sks */; };
 		FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA33E0720ABCA82009FAC2B /* TEMP.m */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,7 @@
 		FF6D3DDB20A9671100806197 /* Extern.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Extern.m; sourceTree = "<group>"; };
 		FF963A1520AD55830025674C /* BackgroundNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BackgroundNode.h; sourceTree = "<group>"; };
 		FF963A1620AD55830025674C /* BackgroundNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BackgroundNode.m; sourceTree = "<group>"; };
+		FF963A1820AD629C0025674C /* TuckedIn.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TuckedIn.sks; sourceTree = "<group>"; };
 		FFA33E0620ABCA82009FAC2B /* TEMP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TEMP.h; sourceTree = "<group>"; };
 		FFA33E0720ABCA82009FAC2B /* TEMP.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEMP.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				FF6D3DD620A9662C00806197 /* AppleShooting.sks */,
+				FF963A1820AD629C0025674C /* TuckedIn.sks */,
 			);
 			path = Emitter;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				FF6D3DD720A9662C00806197 /* AppleShooting.sks in Resources */,
 				FF6D3D9D20A91F6300806197 /* Assets.xcassets in Resources */,
 				FF6D3DA020A91F6300806197 /* LaunchScreen.storyboard in Resources */,
+				FF963A1920AD629C0025674C /* TuckedIn.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
