@@ -9,48 +9,47 @@
 #import "TreeringTurntable.h"
 
 @interface TreeringTurntable()
-@property (nonatomic, strong) SKSpriteNode * anchorPointNode;
+//@property (nonatomic, strong) SKSpriteNode * anchorPointNode;
+@property (nonatomic, strong) NSMutableArray <SKAction *>* actionArray;
 @end
 
 @implementation TreeringTurntable
 
 - (instancetype)initWithColor:(UIColor *)color size:(CGSize)size{
     if (self = [super initWithColor:color size:size]) {
-        self.color = TWRandomColor;
+        self.color = [SKColor clearColor];
         
+        // 树轮的背景
         SKSpriteNode * bgNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"shop-sheet0"] size:size];
         bgNode.zPosition = Treebgzposition;
-//        [self addChild:bgNode];
+        [self addChild:bgNode];
         
+        // 树轮的前景
         SKSpriteNode * boundNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"wood2-sheet0"] size:size];
         boundNode.zPosition = TreeBoundzposition;
-//        [self addChild:boundNode];
+        [self addChild:boundNode];
+        
+        // 参照点
+//        _anchorPointNode = [SKSpriteNode spriteNodeWithColor:[SKColor clearColor] size:CGSizeMake(10, 10)];
+//        _anchorPointNode.position = CGPointMake(0, -size.height * 0.5);
+//        _anchorPointNode.zPosition = Referenceszposition;
+//        [self addChild:_anchorPointNode];
         
         
-        _anchorPointNode = [SKSpriteNode spriteNodeWithColor:TWRandomColor size:CGSizeMake(10, 10)];
-        _anchorPointNode.position = CGPointMake(0, -size.height * 0.5);
-        _anchorPointNode.zPosition = 10001;
-        [self addChild:_anchorPointNode];
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:self.actionArray]]];
     }
     return self;
 }
 
-- (void)addNode:(SKSpriteNode *)node point:(CGPoint)point{
-    
-    
-    //将本节点坐标系中的一个点转换为节点树中另一个节点的坐标系
-    node.position = point;
-    
-    [self addChild:node];
-}
-
-- (void)addNode:(SKSpriteNode *)node size:(CGSize)size{
-    
-    
-    // 将节点树中另一个节点的坐标系的一个点转换为本节点的坐标系。
-    node.position = [self convertPoint:CGPointMake(self.size.height, 0) toNode:node];
-    
-//    [self addChild:node];
+- (NSMutableArray<SKAction *> *)actionArray{
+    if (_actionArray == nil) {
+        _actionArray = [NSMutableArray array];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 3 duration:5.0]];
+        //        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.5 duration:5.0]];
+        //        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.3 duration:2.0]];
+        //        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.3 duration:2.0]];
+    }
+    return _actionArray;
 }
 
 @end

@@ -9,28 +9,33 @@
 #import "TEMP.h"
 #import "TreeringTurntable.h"
 #import "KnifeNode.h"
+#import "BackgroundNode.h"
 
 @interface TEMP()
 @property (nonatomic, strong) TreeringTurntable * treeringTurntable;
 @property (nonatomic, strong) NSMutableArray <KnifeNode *> * knifeNodeArray;
 @property (nonatomic, assign) BOOL allRotate;           // 全部转起来
+@property (nonatomic, strong) NSMutableArray <SKAction *>* actionArray;
 @end
 
 @implementation TEMP
 #pragma mark - --------系统回调函数--------
 - (void)didMoveToView:(SKView *)view{
+    [self addChild:[BackgroundNode initializeBackgroundNode]];
     [self addChild:self.treeringTurntable];
     [self addChild:[self.knifeNodeArray firstObject]];
     _allRotate = NO;
     
-    SKSpriteNode * anchorPointNode = [SKSpriteNode spriteNodeWithColor:TWRandomColor size:CGSizeMake(10, 10)];
-    anchorPointNode.zPosition = 1000;
-
+    // 参照点
+    SKSpriteNode * anchorPointNode = [SKSpriteNode spriteNodeWithColor:[SKColor clearColor] size:CGSizeMake(10, 10)];
+    anchorPointNode.zPosition = Referenceszposition;
     anchorPointNode.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
-    
-    [self.treeringTurntable runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction rotateByAngle:M_PI * 3 duration:5.0],[SKAction rotateByAngle:-M_PI * 1.5 duration:5.0],[SKAction rotateByAngle:M_PI * 0.3 duration:2.0],[SKAction rotateByAngle:-M_PI * 0.3 duration:2.0]]]]];
-    
     [self addChild:anchorPointNode];
+    
+    
+    [self.treeringTurntable runAction:[SKAction repeatActionForever:[SKAction sequence:self.actionArray]]];
+    
+    
 }
 
 -(void)update:(NSTimeInterval)currentTime{
@@ -45,8 +50,8 @@
             [self.knifeNodeArray[0] removeAllActions];
             [self.knifeNodeArray[0] removeFromParent];
             
-            [self.treeringTurntable addNode:self.knifeNodeArray[0] size:self.knifeNodeArray[0].size];
-            
+
+#pragma mark - --------计算夹角的弧度--------
             // *******计算夹角的弧度*******
             // 计算得出当前转盘上那个标记节点的的绝对坐标(跟随转盘会不停旋转)
             CGPoint point1 = [self convertPoint:CGPointMake(0, -self.treeringTurntable.size.height * 0.5) fromNode:self.treeringTurntable];
@@ -91,6 +96,8 @@
                 self.knifeNodeArray[0].zRotation = radians2;
             }
     
+            
+#pragma mark - --------计算位置--------
             /*
              将本节点坐标系中的一个点转换为节点树中另一个节点的坐标系。
              - (CGPoint)convertPoint:(CGPoint)point toNode:(SKNode *)node
@@ -102,9 +109,10 @@
              
              计算当前场景固定点的绝对坐标转换成转盘节点上的坐标系对应的坐标
              */
-            CGPoint point = [self convertPoint:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25) toNode:self.treeringTurntable];
+            CGPoint point = [self convertPoint:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7) toNode:self.treeringTurntable];
             
             self.knifeNodeArray[0].position = point;
+            
             [self.treeringTurntable addChild:self.knifeNodeArray[0]];
             
             
@@ -152,14 +160,24 @@
         
         for (NSInteger i = 0; i < 1000; i++) {
             KnifeNode * knifeNode = [KnifeNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"knife00"] size:CGSizeZero];
-            knifeNode.size = CGSizeMake(TW_SizeRatio(44), TW_SizeRatio(148));
+            knifeNode.size = CGSizeMake(44 * TWScreenWidth * 0.25 / 148, TWScreenWidth * 0.25);
             knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(250) * 0.5);
-            knifeNode.anchorPoint = CGPointMake(0.5, 1);
             [_knifeNodeArray addObject:knifeNode];
         }
     }
     return _knifeNodeArray;
 }
 
+
+- (NSMutableArray<SKAction *> *)actionArray{
+    if (_actionArray == nil) {
+        _actionArray = [NSMutableArray array];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 3 duration:5.0]];
+//        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.5 duration:5.0]];
+//        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.3 duration:2.0]];
+//        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.3 duration:2.0]];
+    }
+    return _actionArray;
+}
 
 @end

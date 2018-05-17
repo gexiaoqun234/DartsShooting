@@ -21,6 +21,7 @@ UIKIT_EXTERN uint32_t const FixedBallThreeCategory;
 
 
 // zposition
+UIKIT_EXTERN NSInteger const Referenceszposition;// 参照点
 UIKIT_EXTERN NSInteger const Treebgzposition;
 UIKIT_EXTERN NSInteger const Knifezposition;
 UIKIT_EXTERN NSInteger const TreeBoundzposition;

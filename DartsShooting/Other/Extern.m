@@ -16,6 +16,7 @@ uint32_t const FixedBallTwoCategory = 0x1 << 4;
 uint32_t const FixedBallThreeCategory = 0x1 << 5;
 
 
-NSInteger const Treebgzposition = 10;
-NSInteger const Knifezposition = 100;
-NSInteger const TreeBoundzposition = 20;
+NSInteger const Referenceszposition = 1;// 参照点
+NSInteger const Treebgzposition = 10;//转盘背景
+NSInteger const Knifezposition = 20;// 刀
+NSInteger const TreeBoundzposition = 30;// 转盘

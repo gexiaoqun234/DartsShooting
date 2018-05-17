@@ -9,7 +9,5 @@
 #import <SpriteKit/SpriteKit.h>
 
 @interface TreeringTurntable : SKSpriteNode
-- (CGPoint)getnodePoint;
-- (void)addNode:(SKSpriteNode *)node point:(CGPoint)point;
-- (void)addNode:(SKNode *)node size:(CGSize)size;
+
 @end
