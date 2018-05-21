@@ -10,4 +10,6 @@
 
 @interface GameScene : SKScene
 
+@property (nonatomic, assign) BOOL showMusic;
+
 @end

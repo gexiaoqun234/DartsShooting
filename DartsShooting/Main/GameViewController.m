@@ -7,16 +7,15 @@
 //
 
 #import "GameViewController.h"
-#import "GameScene.h"
-#import "TEMP.h"
+#import "MeunScene.h"
 
 @implementation GameViewController
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    GameScene * gameScene = [[GameScene alloc]initWithSize:CGSizeMake(TWScreenWidth, TWScreenHeight)];
+    MeunScene * menuScene = [[MeunScene alloc]initWithSize:CGSizeMake(TWScreenWidth, TWScreenHeight)];
     SKView * spriteView = (SKView *)self.view;
-    [spriteView presentScene:gameScene];
+    [spriteView presentScene:menuScene];
 }
 
 - (void)viewDidLoad {
@@ -26,6 +25,20 @@
     spriteView.showsDrawCount = YES;        // 显示当前绘画次数
     spriteView.showsNodeCount = YES;        // 显示当前节点的数量
     spriteView.showsPhysics = YES;
+    
+    
+    // 初始化几个数据
+    BOOL isFirst = [[NSUserDefaults standardUserDefaults] boolForKey:IsFirst];
+    if (isFirst) {
+        NSLog(@"不是第一次开启");
+    } else {
+        NSLog(@"第一次开启");
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:BestScore];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:CurrentScore];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:GameMoney];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:IsFirst];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

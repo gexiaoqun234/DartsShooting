@@ -17,22 +17,41 @@
 @property (nonatomic, assign) BOOL allRotate;// 用来标识所有的刀是否都被发射出去了
 @property (nonatomic, strong) SKEmitterNode * appleShootingEmitter;
 @property (nonatomic, strong) SKEmitterNode * tuckedInEmitter;  // 扎进去
+@property (nonatomic, strong) SKSpriteNode * appleNode;
+@property (nonatomic, strong) SKLabelNode * appleCountNode;
+@property (nonatomic, strong) SKLabelNode * scoreLabel;
+@property (nonatomic, strong) SKLabelNode * historyHighestScoreLabel;// 历史最高分label
+@property (nonatomic, strong) SKLabelNode * highestScoreLabel;// 历史最高分分数
+@property (nonatomic, strong) SKAction * fadeAction;
 @end
 
 @implementation GameScene
 
 #pragma mark - --------系统回调函数--------
 - (void)didMoveToView:(SKView *)view{
+    self.backgroundColor = GAMEBGCOLOR;
     // 设置背景
     [self addChild:[BackgroundNode initializeBackgroundNode]];
     // 添加树轮
     [self addChild:self.treeringTurntable];
+    [self.treeringTurntable run];
     // 添加第一把刀
     [self addChild:[self.knifeNodeArray firstObject]];
+    // 添加游戏币
+    [self addChild:self.appleNode];
+    [self addChild:self.appleCountNode];
+    // 添加得分
+    [self addChild:self.scoreLabel];
+    [self addChild:self.historyHighestScoreLabel];
+    [self addChild:self.highestScoreLabel];
+    
     _allRotate = NO;
     
+    // 添加特效
     [self addChild:self.tuckedInEmitter];
     [self.tuckedInEmitter setHidden:YES];
+//    [self addChild:self.appleShootingEmitter];
+//    [self.appleShootingEmitter setHidden:YES];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -141,6 +160,7 @@
 }
 
 #pragma mark - --------懒加载--------
+#pragma mark - --------刀和树根--------
 - (TreeringTurntable *)treeringTurntable{
     if (_treeringTurntable == nil) {
         _treeringTurntable = [[TreeringTurntable alloc]initWithColor:self.backgroundColor size:CGSizeMake(TWScreenWidth * 0.5, TWScreenWidth * 0.5)];
@@ -155,7 +175,7 @@
         
         // 创建刀
         for (NSInteger i = 0; i < 1000; i++) {
-            SKTexture * texture = [SKTexture textureWithImageNamed:@"knife05"];
+            SKTexture * texture = [SKTexture textureWithImageNamed:@"knife00"];
             KnifeNode * knifeNode = [KnifeNode spriteNodeWithTexture:texture size:CGSizeZero];
             knifeNode.size = CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25);
             knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(250) * 0.5);
@@ -171,6 +191,50 @@
     return _knifeNodeArray;
 }
 
+#pragma mark - --------得分--------
+- (SKLabelNode *)scoreLabel{
+    if (_scoreLabel == nil) {
+        _scoreLabel = [SKLabelNode createLabelNodeWithText:@"999" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(40) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.5, TWScreenHeight - TW_SizeRatio(60))];
+    }
+    return _scoreLabel;
+}
+
+- (SKLabelNode *)historyHighestScoreLabel{
+    if (_historyHighestScoreLabel == nil) {
+        CGFloat textW = [SKLabelNode calculateTheLengthOfTextWithText:BestScore fontName:DefaultFontName fontSize:TW_SizeRatio(20)].width;
+        _historyHighestScoreLabel = [SKLabelNode createLabelNodeWithText:BestScore withVerticalAlignmentMode:(SKLabelVerticalAlignmentModeCenter) withHorizontalAlignmentMode:(SKLabelHorizontalAlignmentModeCenter) withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(20) withFontName:DefaultFontName withPosition:CGPointMake(textW * 0.5 + TW_SizeRatio(10), TWScreenHeight - TW_SizeRatio(45))];
+        [_historyHighestScoreLabel runAction:self.fadeAction];
+    }
+    return _historyHighestScoreLabel;
+}
+
+- (SKLabelNode *)highestScoreLabel{
+    if (_highestScoreLabel == nil) {
+        CGFloat textW = [SKLabelNode calculateTheLengthOfTextWithText:BestScore fontName:DefaultFontName fontSize:TW_SizeRatio(20)].width;
+        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:@"999" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(20) withFontName:DefaultFontName withPosition: CGPointMake(textW * 0.5 + TW_SizeRatio(10), TWScreenHeight - TW_SizeRatio(45) - TW_SizeRatio(20))];
+        [_highestScoreLabel runAction:self.fadeAction];
+    }
+    return _highestScoreLabel;
+}
+
+#pragma mark - --------游戏币--------
+- (SKSpriteNode *)appleNode{
+    if (_appleNode == nil) {
+        _appleNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"appleicon-sheet0"] size:CGSizeMake(appleW, appleH)];
+        _appleNode.zPosition = Scorezposition;
+        _appleNode.position = CGPointMake(TWScreenWidth - appleW, TWScreenHeight - appleH - TW_SizeRatio(20));
+    }
+    return _appleNode;
+}
+
+- (SKLabelNode *)appleCountNode{
+    if (_appleCountNode == nil) {
+        _appleCountNode = [SKLabelNode createLabelNodeWithText:@"999" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeLeft withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth - 3 * appleW - TW_SizeRatio(10), TWScreenHeight - appleH - TW_SizeRatio(25))];
+    }
+    return _appleCountNode;
+}
+
+#pragma mark - --------特效懒加载--------
 - (SKEmitterNode *)tuckedInEmitter{
     if (_tuckedInEmitter == nil) {
         _tuckedInEmitter = [SKEmitterNode nodeWithFileNamed:@"TuckedIn.sks"];
@@ -182,10 +246,17 @@
 - (SKEmitterNode *)appleShootingEmitter{
     if (_appleShootingEmitter == nil) {
         _appleShootingEmitter = [SKEmitterNode nodeWithFileNamed:@"AppleShooting.sks"];
-//        _appleShootingEmitter.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.5);
+        _appleShootingEmitter.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
     }
     return _appleShootingEmitter;
 }
 
+#pragma mark - --------action懒加载--------
+- (SKAction *)fadeAction{
+    if (_fadeAction == nil) {
+        _fadeAction = [SKAction repeatActionForever:[SKAction sequence:@[[SKAction fadeAlphaTo:0.2 duration:5],[SKAction fadeAlphaTo:1.0 duration:0.5]]]];
+    }
+    return _fadeAction;
+}
 
 @end

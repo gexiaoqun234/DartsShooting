@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF5D2CC820B2646D00C660D3 /* 309.TTF in Resources */ = {isa = PBXBuildFile; fileRef = FF5D2CC720B2646D00C660D3 /* 309.TTF */; };
+		FF5D2CCB20B2686600C660D3 /* SKLabelNode+CreateLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CCA20B2686600C660D3 /* SKLabelNode+CreateLabel.m */; };
+		FF5D2CCE20B28A8F00C660D3 /* TitltNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CCD20B28A8F00C660D3 /* TitltNode.m */; };
+		FF5D2CD120B28BC300C660D3 /* MeunScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CD020B28BC300C660D3 /* MeunScene.m */; };
+		FF5D2CD720B2C1E900C660D3 /* LockKnifeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */; };
 		FF6D3D9B20A91F6100806197 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3D9920A91F6100806197 /* Main.storyboard */; };
 		FF6D3D9D20A91F6300806197 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3D9C20A91F6300806197 /* Assets.xcassets */; };
 		FF6D3DA020A91F6300806197 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3D9E20A91F6300806197 /* LaunchScreen.storyboard */; };
@@ -24,6 +29,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FF5D2CC720B2646D00C660D3 /* 309.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = 309.TTF; sourceTree = "<group>"; };
+		FF5D2CC920B2686600C660D3 /* SKLabelNode+CreateLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SKLabelNode+CreateLabel.h"; sourceTree = "<group>"; };
+		FF5D2CCA20B2686600C660D3 /* SKLabelNode+CreateLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SKLabelNode+CreateLabel.m"; sourceTree = "<group>"; };
+		FF5D2CCC20B28A8F00C660D3 /* TitltNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TitltNode.h; sourceTree = "<group>"; };
+		FF5D2CCD20B28A8F00C660D3 /* TitltNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TitltNode.m; sourceTree = "<group>"; };
+		FF5D2CCF20B28BC300C660D3 /* MeunScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeunScene.h; sourceTree = "<group>"; };
+		FF5D2CD020B28BC300C660D3 /* MeunScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MeunScene.m; sourceTree = "<group>"; };
+		FF5D2CD520B2C1E900C660D3 /* LockKnifeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKnifeNode.h; sourceTree = "<group>"; };
+		FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LockKnifeNode.m; sourceTree = "<group>"; };
 		FF6D3D8920A91F6100806197 /* DartsShooting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DartsShooting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF6D3D9A20A91F6100806197 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FF6D3D9C20A91F6300806197 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,6 +77,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF5D2CC620B2646D00C660D3 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				FF5D2CC720B2646D00C660D3 /* 309.TTF */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		FF6D3D8020A91F6100806197 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				FF6D3DAD20A9220200806197 /* PrefixHeader.pch */,
+				FF5D2CC620B2646D00C660D3 /* Resource */,
 				FF6D3DD820A9670000806197 /* Other */,
 				FF6D3DC720A9661500806197 /* Emitter */,
 				FF6D3DC820A9661500806197 /* Main */,
@@ -105,6 +128,10 @@
 				FF6D3DC520A965AD00806197 /* TreeringTurntable.m */,
 				FF963A1520AD55830025674C /* BackgroundNode.h */,
 				FF963A1620AD55830025674C /* BackgroundNode.m */,
+				FF5D2CCC20B28A8F00C660D3 /* TitltNode.h */,
+				FF5D2CCD20B28A8F00C660D3 /* TitltNode.m */,
+				FF5D2CD520B2C1E900C660D3 /* LockKnifeNode.h */,
+				FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */,
 			);
 			path = Node;
 			sourceTree = "<group>";
@@ -133,6 +160,8 @@
 		FF6D3DCF20A9661500806197 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				FF5D2CCF20B28BC300C660D3 /* MeunScene.h */,
+				FF5D2CD020B28BC300C660D3 /* MeunScene.m */,
 				FF6D3DD020A9661500806197 /* GameScene.h */,
 				FF6D3DD120A9661500806197 /* GameScene.m */,
 				FFA33E0620ABCA82009FAC2B /* TEMP.h */,
@@ -147,6 +176,8 @@
 				FF6D3DD920A9670000806197 /* Header.h */,
 				FF6D3DDA20A9671100806197 /* Extern.h */,
 				FF6D3DDB20A9671100806197 /* Extern.m */,
+				FF5D2CC920B2686600C660D3 /* SKLabelNode+CreateLabel.h */,
+				FF5D2CCA20B2686600C660D3 /* SKLabelNode+CreateLabel.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -211,6 +242,7 @@
 				FF6D3D9B20A91F6100806197 /* Main.storyboard in Resources */,
 				FF6D3DD720A9662C00806197 /* AppleShooting.sks in Resources */,
 				FF6D3D9D20A91F6300806197 /* Assets.xcassets in Resources */,
+				FF5D2CC820B2646D00C660D3 /* 309.TTF in Resources */,
 				FF6D3DA020A91F6300806197 /* LaunchScreen.storyboard in Resources */,
 				FF963A1920AD629C0025674C /* TuckedIn.sks in Resources */,
 			);
@@ -226,12 +258,16 @@
 				FF6D3DD320A9661500806197 /* main.m in Sources */,
 				FF6D3DDC20A9671100806197 /* Extern.m in Sources */,
 				FF6D3DD220A9661500806197 /* GameViewController.m in Sources */,
+				FF5D2CCB20B2686600C660D3 /* SKLabelNode+CreateLabel.m in Sources */,
+				FF5D2CD720B2C1E900C660D3 /* LockKnifeNode.m in Sources */,
 				FF6D3DD420A9661500806197 /* AppDelegate.m in Sources */,
 				FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */,
 				FF6D3DD520A9661500806197 /* GameScene.m in Sources */,
 				FF963A1720AD55830025674C /* BackgroundNode.m in Sources */,
 				FF6D3DC620A965AD00806197 /* TreeringTurntable.m in Sources */,
+				FF5D2CD120B28BC300C660D3 /* MeunScene.m in Sources */,
 				FF6D3DB120A9276100806197 /* KnifeNode.m in Sources */,
+				FF5D2CCE20B28A8F00C660D3 /* TitltNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

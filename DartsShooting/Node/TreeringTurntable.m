@@ -34,20 +34,24 @@
 //        _anchorPointNode.position = CGPointMake(0, -size.height * 0.5);
 //        _anchorPointNode.zPosition = Referenceszposition;
 //        [self addChild:_anchorPointNode];
-        
-        
-        [self runAction:[SKAction repeatActionForever:[SKAction sequence:self.actionArray]]];
     }
     return self;
+}
+
+- (void)run{
+    [self runAction:[SKAction repeatActionForever:[SKAction sequence:self.actionArray]]];
 }
 
 - (NSMutableArray<SKAction *> *)actionArray{
     if (_actionArray == nil) {
         _actionArray = [NSMutableArray array];
+        
+        
+        
         [_actionArray addObject:[SKAction rotateByAngle:M_PI * 3 duration:10.0]];
-        //        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.5 duration:5.0]];
-        //        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.3 duration:2.0]];
-        //        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.3 duration:2.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.5 duration:5.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.3 duration:2.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.3 duration:2.0]];
     }
     return _actionArray;
 }

@@ -11,5 +11,7 @@
 
 #import "Header.h"
 #import "Extern.h"
+#import "SKLabelNode+CreateLabel.h"
+
 
 #endif /* PrefixHeader_pch */

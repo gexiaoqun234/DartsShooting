@@ -17,10 +17,17 @@
 #define TWSizeRatio           (TWScreenWidth / 375.0)
 #define TW_SizeRatio(a)       ((a) * TWSizeRatio)
 
+// 游戏币
+#define appleW TW_SizeRatio(30)
+#define appleH appleW * 86 / 65.0
+
+#define BuyKnifeTextureWH TWScreenWidth * 0.8 * 0.2 * 0.95
+
 // MARK:- 颜色
 #define TWRandomColor [UIColor colorWithRed:arc4random()%256/255.0 green:arc4random()%256/255.0 blue:arc4random()%256/255.0 alpha:1.0]
 #define TWColorRGBA(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
 #define TWColorRGB(r,g,b) TWColorRGBA(r,g,b,1.0)
+#define GAMEBGCOLOR TWColorRGB(45, 95, 122)
 
 // 角度转弧度
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
