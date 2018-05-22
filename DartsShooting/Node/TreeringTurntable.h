@@ -11,5 +11,6 @@
 @interface TreeringTurntable : SKSpriteNode
 
 - (void)run;
+- (void)stop;
 
 @end

@@ -12,6 +12,7 @@
 #import "Header.h"
 #import "Extern.h"
 #import "SKLabelNode+CreateLabel.h"
-
+#import "GameTool.h"
+#import "Checkpoint.h"
 
 #endif /* PrefixHeader_pch */

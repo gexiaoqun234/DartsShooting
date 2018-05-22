@@ -19,6 +19,7 @@
     CGFloat h = w * 58 / 44.0;
     SKSpriteNode * lockNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"padlock-sheet0"] size:CGSizeMake(w,h)];
     lockNode.position = CGPointMake(BuyKnifeTextureWH * 0.5 - w * 0.5, -(BuyKnifeTextureWH * 0.5 - w * 0.5));
+    lockNode.name = LockNode;
     [node addChild:lockNode];
     return node;
 }

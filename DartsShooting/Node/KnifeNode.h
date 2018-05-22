@@ -10,4 +10,7 @@
 
 @interface KnifeNode : SKSpriteNode
 
+- (void)run;
+- (void)stop;
+
 @end

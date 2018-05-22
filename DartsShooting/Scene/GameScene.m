@@ -10,8 +10,9 @@
 #import "TreeringTurntable.h"
 #import "KnifeNode.h"
 #import "BackgroundNode.h"
+#import "MeunScene.h"
 
-@interface GameScene()
+@interface GameScene()<SKPhysicsContactDelegate>
 @property (nonatomic, strong) TreeringTurntable * treeringTurntable;
 @property (nonatomic, strong) NSMutableArray <KnifeNode *> * knifeNodeArray;
 @property (nonatomic, assign) BOOL allRotate;// 用来标识所有的刀是否都被发射出去了
@@ -23,6 +24,18 @@
 @property (nonatomic, strong) SKLabelNode * historyHighestScoreLabel;// 历史最高分label
 @property (nonatomic, strong) SKLabelNode * highestScoreLabel;// 历史最高分分数
 @property (nonatomic, strong) SKAction * fadeAction;
+
+@property (nonatomic, strong) SKSpriteNode * indicatorNode;// 指示器
+
+@property (nonatomic, assign) NSInteger currentScore;
+@property (nonatomic, assign) NSInteger appleCount;
+@property (nonatomic, strong) SKSpriteNode * pauseNode;
+
+@property (nonatomic, strong) SKSpriteNode * maskNode;
+@property (nonatomic, strong) SKSpriteNode * continueNode;
+@property (nonatomic, strong) SKSpriteNode * homeNode;
+
+@property (nonatomic, assign) NSInteger knifeCount;
 @end
 
 @implementation GameScene
@@ -30,6 +43,11 @@
 #pragma mark - --------系统回调函数--------
 - (void)didMoveToView:(SKView *)view{
     self.backgroundColor = GAMEBGCOLOR;
+    
+    _currentScore = 0;
+    _knifeCount = 100;
+    _appleCount = [[GameTool shareManager] getGameMoney];
+    
     // 设置背景
     [self addChild:[BackgroundNode initializeBackgroundNode]];
     // 添加树轮
@@ -37,6 +55,7 @@
     [self.treeringTurntable run];
     // 添加第一把刀
     [self addChild:[self.knifeNodeArray firstObject]];
+    [self addChild:self.indicatorNode];
     // 添加游戏币
     [self addChild:self.appleNode];
     [self addChild:self.appleCountNode];
@@ -44,106 +63,172 @@
     [self addChild:self.scoreLabel];
     [self addChild:self.historyHighestScoreLabel];
     [self addChild:self.highestScoreLabel];
+    // 添加暂停按钮
+    [self addChild:self.pauseNode];
     
     _allRotate = NO;
     
     // 添加特效
     [self addChild:self.tuckedInEmitter];
     [self.tuckedInEmitter setHidden:YES];
-//    [self addChild:self.appleShootingEmitter];
-//    [self.appleShootingEmitter setHidden:YES];
+    [self addChild:self.appleShootingEmitter];
+    [self.appleShootingEmitter setHidden:YES];
+    
+    // 物理特性
+    self.physicsWorld.contactDelegate = self;
+    self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+    self.physicsBody.categoryBitMask = WordCategory;
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+#pragma mark - --------SKPhysicsContactDelegate--------
+- (void)didBeginContact:(SKPhysicsContact *)contact{
+    if (contact.bodyA.categoryBitMask == KnifeCategory && contact.bodyB.categoryBitMask == KnifeCategory) {
+        NSLog(@"刀刀相撞");
+        // 保存数据
+        
+        
+        // 游戏结束
+        // 保存当前得分
+        [[GameTool shareManager] saveCurrentScore:_currentScore];
+        [[GameTool shareManager] saveBestScore:_currentScore];
+    }
     
-    if (_allRotate == NO) {
-        [self.knifeNodeArray[0] runAction:[SKAction moveTo:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - (TWScreenWidth * 0.5) * 0.5 - TW_SizeRatio(74) * 0.8) duration:0.2] completion:^{
+    if (contact.bodyA.categoryBitMask == AppleCategory || contact.bodyB.categoryBitMask == AppleCategory) {
+        NSLog(@"刀苹果相撞");
+        // 增加游戏币
+        _appleCount = _appleCount++;
+        // 保存游戏币
+        [[GameTool shareManager] saveGameMoney:_appleCount];
+    }
+    
+    if (contact.bodyA.categoryBitMask == TreeringTurntableCategory || contact.bodyB.categoryBitMask == TreeringTurntableCategory) {
+        
+        if (self.knifeNodeArray.count > 0) {
+            NSLog(@"刀树相撞");
+            _currentScore++;
             
-            [self.tuckedInEmitter setHidden:NO];
-            [self.tuckedInEmitter resetSimulation];
+            // 保存当前得分
+            [[GameTool shareManager] saveCurrentScore:_currentScore];
+            [[GameTool shareManager] saveBestScore:_currentScore];
             
-            // 从当前场景移除，并且移除自带的动作
-            [self.knifeNodeArray[0] removeAllActions];
-            [self.knifeNodeArray[0] removeFromParent];
+        } else {
+            // 当到全部用完，树散
             
+            // 进入下关
+        }
+    }
+}
+
+#pragma mark - --------点击事件--------
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    UITouch * touch = [touches anyObject];
+    CGPoint positionInScene = [touch locationInNode:self];
+    SKSpriteNode * node = (SKSpriteNode *)[self nodeAtPoint:positionInScene];
+    if ([node.name isEqualToString:Pause]) {
+        [self.treeringTurntable stop];
+        [self.knifeNodeArray[0] stop];
+        [self addChild:self.maskNode];
+    } else if ([node.name isEqualToString:Continue]) {
+        [self.treeringTurntable run];
+        [self.knifeNodeArray[0] run];
+        [self.maskNode removeFromParent];
+    } else if ([node.name isEqualToString:Home]) {
+        [[GameTool shareManager] saveCurrentScore:_currentScore];
+        [[GameTool shareManager] saveBestScore:_currentScore];
+        MeunScene * meunScene = [[MeunScene alloc]initWithSize:self.size];
+        [self.view presentScene:meunScene];
+    } else {
+        // 点击发射刀
+        if (_allRotate == NO) {
+            [self.knifeNodeArray[0] runAction:[SKAction moveTo:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - (TWScreenWidth * 0.5) * 0.5 - TW_SizeRatio(74) * 0.8) duration:0.2] completion:^{
+                
+                [self.tuckedInEmitter setHidden:NO];
+                [self.tuckedInEmitter resetSimulation];
+                
+                // 从当前场景移除，并且移除自带的动作
+                [self.knifeNodeArray[0] removeAllActions];
+                [self.knifeNodeArray[0] removeFromParent];
+                
 #pragma mark - --------计算夹角的弧度--------
-            // *******计算夹角的弧度*******
-            // 计算得出当前转盘上那个标记节点的的绝对坐标(跟随转盘会不停旋转)
-            CGPoint point1 = [self convertPoint:CGPointMake(0, -self.treeringTurntable.size.height * 0.5) fromNode:self.treeringTurntable];
-            
-            // 设置出固定坐标
-            CGPoint fixedPoint = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
-            
-            // 计算夹角对边的长度
-            // 1计算三角形竖线的长度
-            double tothesideY = fabs(fixedPoint.y - point1.y);
-            // 2计算三角形横线的长度
-            double tothesideX = fabs(fixedPoint.x - point1.x);
-            // 3勾股定理计算斜边长度
-            double totheside = sqrt(pow(tothesideX, 2) + pow(tothesideY, 2));
-            
-            // 正弦值(这里只是计算的夹角的一半)
-            double sinX = (totheside * 0.5) / (TWScreenWidth * 0.25);
-            
-            // 计算一半夹角的弧度
-            double radians = asin(sinX);
-            
-            // 计算完整夹角的度数
-            double angle = RADIANS_TO_DEGREES(radians) * 2;
-            
-            // 计算完整夹角的弧度
-            double radians2 = DEGREES_TO_RADIANS(angle);
-            
-            /*
-             将弧度赋值给节点
-             这里要注意象限
-             在左半边的时候应该是赋值-radians2
-             在右半边的时候应该是赋值radians2
-             
-             
-             左右如何判断界定？
-             将转盘上的参照点转换成当前场景中的点，根据这个点坐标来进行判断
-             这个点上面计算过，就是point1
-             */
-            if (point1.x >= TWScreenWidth * 0.5) {
-                self.knifeNodeArray[0].zRotation = -radians2;
-            } else {
-                self.knifeNodeArray[0].zRotation = radians2;
-            }
-
-
+                // *******计算夹角的弧度*******
+                // 计算得出当前转盘上那个标记节点的的绝对坐标(跟随转盘会不停旋转)
+                CGPoint point1 = [self convertPoint:CGPointMake(0, -self.treeringTurntable.size.height * 0.5) fromNode:self.treeringTurntable];
+                
+                // 设置出固定坐标
+                CGPoint fixedPoint = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
+                
+                // 计算夹角对边的长度
+                // 1计算三角形竖线的长度
+                double tothesideY = fabs(fixedPoint.y - point1.y);
+                // 2计算三角形横线的长度
+                double tothesideX = fabs(fixedPoint.x - point1.x);
+                // 3勾股定理计算斜边长度
+                double totheside = sqrt(pow(tothesideX, 2) + pow(tothesideY, 2));
+                
+                // 正弦值(这里只是计算的夹角的一半)
+                double sinX = (totheside * 0.5) / (TWScreenWidth * 0.25);
+                
+                // 计算一半夹角的弧度
+                double radians = asin(sinX);
+                
+                // 计算完整夹角的度数
+                double angle = RADIANS_TO_DEGREES(radians) * 2;
+                
+                // 计算完整夹角的弧度
+                double radians2 = DEGREES_TO_RADIANS(angle);
+                
+                /*
+                 将弧度赋值给节点
+                 这里要注意象限
+                 在左半边的时候应该是赋值-radians2
+                 在右半边的时候应该是赋值radians2
+                 
+                 
+                 左右如何判断界定？
+                 将转盘上的参照点转换成当前场景中的点，根据这个点坐标来进行判断
+                 这个点上面计算过，就是point1
+                 */
+                if (point1.x >= TWScreenWidth * 0.5) {
+                    self.knifeNodeArray[0].zRotation = -radians2;
+                } else {
+                    self.knifeNodeArray[0].zRotation = radians2;
+                }
+                
+                
 #pragma mark - --------计算位置--------
-            /*
-             将本节点坐标系中的一个点转换为节点树中另一个节点的坐标系。
-             - (CGPoint)convertPoint:(CGPoint)point toNode:(SKNode *)node
-             
-             参数
-             point:本节点坐标系上的一个点
-             node:同一个节点树上的另一个节点
-             返回值    转换到其他节点坐标系的同一个点
-             
-             计算当前场景固定点的绝对坐标转换成转盘节点上的坐标系对应的坐标
-             */
-            CGPoint point = [self convertPoint:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25 * 0.75) toNode:self.treeringTurntable];
-            
-            self.knifeNodeArray[0].position = point;
-            [self.treeringTurntable addChild:self.knifeNodeArray[0]];
-            
-            
-            // 删除掉这个
-            [self.knifeNodeArray removeObject:self.knifeNodeArray[0]];
-            
-            // 在添加新的第一个
-            if (self.knifeNodeArray.count > 0) {
-                self.knifeNodeArray[0].position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(250) * 0.5);
-                [self addChild:self.knifeNodeArray[0]];
-            }
-            
-            if (self.knifeNodeArray.count == 0) {
-                self.allRotate = YES;
-                NSLog(@"全部发射完毕");
-            }
-        }];
+                /*
+                 将本节点坐标系中的一个点转换为节点树中另一个节点的坐标系。
+                 - (CGPoint)convertPoint:(CGPoint)point toNode:(SKNode *)node
+                 
+                 参数
+                 point:本节点坐标系上的一个点
+                 node:同一个节点树上的另一个节点
+                 返回值    转换到其他节点坐标系的同一个点
+                 
+                 计算当前场景固定点的绝对坐标转换成转盘节点上的坐标系对应的坐标
+                 */
+                CGPoint point = [self convertPoint:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25) toNode:self.treeringTurntable];
+                
+                self.knifeNodeArray[0].position = point;
+                self.knifeNodeArray[0].anchorPoint = CGPointMake(0.5, 0.8);
+                [self.treeringTurntable addChild:self.knifeNodeArray[0]];
+                
+                
+                // 删除掉这个
+                [self.knifeNodeArray removeObject:self.knifeNodeArray[0]];
+                
+                // 在添加新的第一个
+                if (self.knifeNodeArray.count > 0) {
+                    self.knifeNodeArray[0].position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(127));
+                    [self addChild:self.knifeNodeArray[0]];
+                }
+                
+                if (self.knifeNodeArray.count == 0) {
+                    self.allRotate = YES;
+                    NSLog(@"全部发射完毕");
+                }
+            }];
+        }
     }
 }
 
@@ -172,29 +257,112 @@
 - (NSMutableArray<KnifeNode *> *)knifeNodeArray{
     if (_knifeNodeArray == nil) {
         _knifeNodeArray = [NSMutableArray array];
-        
+ 
         // 创建刀
-        for (NSInteger i = 0; i < 1000; i++) {
-            SKTexture * texture = [SKTexture textureWithImageNamed:@"knife00"];
-            KnifeNode * knifeNode = [KnifeNode spriteNodeWithTexture:texture size:CGSizeZero];
-            knifeNode.size = CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25);
-            knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(250) * 0.5);
-            knifeNode.anchorPoint = CGPointMake(0.5, 1);
+        for (NSInteger i = 0; i < _knifeCount; i++) {
+            SKTexture * texture = [SKTexture textureWithImageNamed:[[GameTool shareManager] getChooesKnife]];
+            KnifeNode * knifeNode = [[KnifeNode alloc]initWithTexture:texture color:[UIColor clearColor] size:CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25)];
+            knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(127));
+            knifeNode.anchorPoint = CGPointMake(0.5, 0);
             [_knifeNodeArray addObject:knifeNode];
-        }
-        
-        // 添加抖动动作
-        for (NSInteger i = 0; i < 1000; i++) {
-            [_knifeNodeArray[i] runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction moveToY:TW_SizeRatio(250) * 0.5 + 5 duration:1],[SKAction moveToY:TW_SizeRatio(250) * 0.5 - 5 duration:1]]]]];
         }
     }
     return _knifeNodeArray;
 }
 
+#pragma mark - --------蒙版层内容--------
+- (SKSpriteNode *)maskNode{
+    if (_maskNode == nil) {
+        _maskNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithWhite:0 alpha:0.7] size:self.size];
+        _maskNode.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.5);
+        _maskNode.zPosition = MaskBGzposition;
+        [_maskNode addChild:self.continueNode];
+        [_maskNode addChild:self.homeNode];
+    }
+    return _maskNode;
+}
+
+- (SKSpriteNode *)continueNode{
+    if (_continueNode == nil) {
+        _continueNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"resumebtn-sheet0"]];
+        _continueNode.name = Continue;
+        _continueNode.zPosition = HomeNodezposition;
+        _continueNode.size = CGSizeMake(TWScreenWidth * 0.2, TWScreenWidth * 0.2);
+        _continueNode.position = CGPointMake(TWScreenWidth * 0.2, 0);
+    }
+    return _continueNode;
+}
+
+- (SKSpriteNode *)homeNode{
+    if (_homeNode == nil) {
+        _homeNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"homebtn-sheet0"]];
+        _homeNode.name = Home;
+        _homeNode.zPosition = HomeNodezposition;
+        _homeNode.size = CGSizeMake(TWScreenWidth * 0.2, TWScreenWidth * 0.2);
+        _homeNode.position = CGPointMake(-TWScreenWidth * 0.2, 0);
+    }
+    return _homeNode;
+}
+
+#pragma mark - --------指示器--------
+- (SKSpriteNode *)indicatorNode{
+    if (_indicatorNode == nil) {
+        
+        // 最多可以有10根刀
+        
+        // 先使用占位的占满
+        CGFloat allW = TWScreenWidth * 0.6;
+        // 每排放5个
+        CGFloat oneW = allW * 0.2;
+        // 计算高度
+        CGFloat oneH = 70 * oneW / 50.0;
+        // 一共2排
+        CGFloat allH = 2 * oneH;
+        
+        _indicatorNode = [[SKSpriteNode alloc]initWithColor:[UIColor clearColor] size:CGSizeMake(allW, allH)];
+        _indicatorNode.position = CGPointMake(TWScreenWidth * 0.6, oneH);
+        
+        // yellowKnife
+
+        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW * 2, oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW, oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(0, oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW, oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW * 2, oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW * 2, -oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW, -oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(0, -oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW, -oneH * 0.5)]];
+        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW * 2, -oneH * 0.5)]];
+    }
+    return _indicatorNode;
+}
+
+- (SKSpriteNode *)creactNode:(CGPoint)position{
+    CGFloat allW = TWScreenWidth * 0.6;
+    CGFloat oneW = allW * 0.1;
+    CGFloat oneH = 70 * oneW / 50.0;
+    SKSpriteNode * one = [[SKSpriteNode alloc]initWithTexture:[SKTexture textureWithImageNamed:@"whiteKnife"]];
+    one.size = CGSizeMake(oneW, oneH);
+    one.position = position;
+    return one;
+}
+
+- (SKSpriteNode *)pauseNode{
+    if (_pauseNode == nil) {
+        _pauseNode = [[SKSpriteNode alloc]initWithTexture:[SKTexture textureWithImageNamed:@"extrasbtn-sheet1"]];
+        _pauseNode.size = CGSizeMake(TWScreenWidth * 0.2, TWScreenWidth * 0.2);
+        _pauseNode.name = Pause;
+        _pauseNode.zPosition = Pausezposition;
+        _pauseNode.position = CGPointMake(TWScreenWidth * 0.2 * 0.5, TWScreenWidth * 0.2);
+    }
+    return _pauseNode;
+}
+
 #pragma mark - --------得分--------
 - (SKLabelNode *)scoreLabel{
     if (_scoreLabel == nil) {
-        _scoreLabel = [SKLabelNode createLabelNodeWithText:@"999" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(40) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.5, TWScreenHeight - TW_SizeRatio(60))];
+        _scoreLabel = [SKLabelNode createLabelNodeWithText:@"0" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(40) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.5, TWScreenHeight - TW_SizeRatio(60))];
     }
     return _scoreLabel;
 }
@@ -211,7 +379,7 @@
 - (SKLabelNode *)highestScoreLabel{
     if (_highestScoreLabel == nil) {
         CGFloat textW = [SKLabelNode calculateTheLengthOfTextWithText:BestScore fontName:DefaultFontName fontSize:TW_SizeRatio(20)].width;
-        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:@"999" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(20) withFontName:DefaultFontName withPosition: CGPointMake(textW * 0.5 + TW_SizeRatio(10), TWScreenHeight - TW_SizeRatio(45) - TW_SizeRatio(20))];
+        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getBestScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(20) withFontName:DefaultFontName withPosition: CGPointMake(textW * 0.5 + TW_SizeRatio(10), TWScreenHeight - TW_SizeRatio(45) - TW_SizeRatio(20))];
         [_highestScoreLabel runAction:self.fadeAction];
     }
     return _highestScoreLabel;
@@ -229,7 +397,7 @@
 
 - (SKLabelNode *)appleCountNode{
     if (_appleCountNode == nil) {
-        _appleCountNode = [SKLabelNode createLabelNodeWithText:@"999" withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeLeft withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth - 3 * appleW - TW_SizeRatio(10), TWScreenHeight - appleH - TW_SizeRatio(25))];
+        _appleCountNode = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getGameMoney]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeLeft withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth - 3 * appleW - TW_SizeRatio(10), TWScreenHeight - appleH - TW_SizeRatio(25))];
     }
     return _appleCountNode;
 }

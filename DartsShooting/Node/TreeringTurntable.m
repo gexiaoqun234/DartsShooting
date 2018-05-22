@@ -9,7 +9,6 @@
 #import "TreeringTurntable.h"
 
 @interface TreeringTurntable()
-//@property (nonatomic, strong) SKSpriteNode * anchorPointNode;
 @property (nonatomic, strong) NSMutableArray <SKAction *>* actionArray;
 @end
 
@@ -29,11 +28,12 @@
         boundNode.zPosition = TreeBoundzposition;
         [self addChild:boundNode];
         
-        // 参照点
-//        _anchorPointNode = [SKSpriteNode spriteNodeWithColor:[SKColor clearColor] size:CGSizeMake(10, 10)];
-//        _anchorPointNode.position = CGPointMake(0, -size.height * 0.5);
-//        _anchorPointNode.zPosition = Referenceszposition;
-//        [self addChild:_anchorPointNode];
+        // 物理属性
+        self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:TWScreenWidth * 0.5 * 0.5 * 0.75];
+        self.physicsBody.categoryBitMask = TreeringTurntableCategory;
+        self.physicsBody.affectedByGravity = NO;
+        self.physicsBody.contactTestBitMask = KnifeCategory;
+        self.physicsBody.collisionBitMask = KnifeCategory;
     }
     return self;
 }
@@ -42,10 +42,13 @@
     [self runAction:[SKAction repeatActionForever:[SKAction sequence:self.actionArray]]];
 }
 
+- (void)stop{
+    [self removeAllActions];
+}
+
 - (NSMutableArray<SKAction *> *)actionArray{
     if (_actionArray == nil) {
         _actionArray = [NSMutableArray array];
-        
         
         
         [_actionArray addObject:[SKAction rotateByAngle:M_PI * 3 duration:10.0]];

@@ -12,6 +12,9 @@
 		FF5D2CCE20B28A8F00C660D3 /* TitltNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CCD20B28A8F00C660D3 /* TitltNode.m */; };
 		FF5D2CD120B28BC300C660D3 /* MeunScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CD020B28BC300C660D3 /* MeunScene.m */; };
 		FF5D2CD720B2C1E900C660D3 /* LockKnifeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */; };
+		FF5D2CDA20B3A49300C660D3 /* GameTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CD920B3A49300C660D3 /* GameTool.m */; };
+		FF5D2CDD20B409CB00C660D3 /* Checkpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CDC20B409CB00C660D3 /* Checkpoint.m */; };
+		FF5D2CE020B41DBE00C660D3 /* IndicatorNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5D2CDF20B41DBE00C660D3 /* IndicatorNode.m */; };
 		FF6D3D9B20A91F6100806197 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3D9920A91F6100806197 /* Main.storyboard */; };
 		FF6D3D9D20A91F6300806197 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3D9C20A91F6300806197 /* Assets.xcassets */; };
 		FF6D3DA020A91F6300806197 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF6D3D9E20A91F6300806197 /* LaunchScreen.storyboard */; };
@@ -38,6 +41,12 @@
 		FF5D2CD020B28BC300C660D3 /* MeunScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MeunScene.m; sourceTree = "<group>"; };
 		FF5D2CD520B2C1E900C660D3 /* LockKnifeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockKnifeNode.h; sourceTree = "<group>"; };
 		FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LockKnifeNode.m; sourceTree = "<group>"; };
+		FF5D2CD820B3A49300C660D3 /* GameTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameTool.h; sourceTree = "<group>"; };
+		FF5D2CD920B3A49300C660D3 /* GameTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameTool.m; sourceTree = "<group>"; };
+		FF5D2CDB20B409CB00C660D3 /* Checkpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Checkpoint.h; sourceTree = "<group>"; };
+		FF5D2CDC20B409CB00C660D3 /* Checkpoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Checkpoint.m; sourceTree = "<group>"; };
+		FF5D2CDE20B41DBE00C660D3 /* IndicatorNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndicatorNode.h; sourceTree = "<group>"; };
+		FF5D2CDF20B41DBE00C660D3 /* IndicatorNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndicatorNode.m; sourceTree = "<group>"; };
 		FF6D3D8920A91F6100806197 /* DartsShooting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DartsShooting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF6D3D9A20A91F6100806197 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FF6D3D9C20A91F6300806197 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -132,6 +141,8 @@
 				FF5D2CCD20B28A8F00C660D3 /* TitltNode.m */,
 				FF5D2CD520B2C1E900C660D3 /* LockKnifeNode.h */,
 				FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */,
+				FF5D2CDE20B41DBE00C660D3 /* IndicatorNode.h */,
+				FF5D2CDF20B41DBE00C660D3 /* IndicatorNode.m */,
 			);
 			path = Node;
 			sourceTree = "<group>";
@@ -178,6 +189,10 @@
 				FF6D3DDB20A9671100806197 /* Extern.m */,
 				FF5D2CC920B2686600C660D3 /* SKLabelNode+CreateLabel.h */,
 				FF5D2CCA20B2686600C660D3 /* SKLabelNode+CreateLabel.m */,
+				FF5D2CD820B3A49300C660D3 /* GameTool.h */,
+				FF5D2CD920B3A49300C660D3 /* GameTool.m */,
+				FF5D2CDB20B409CB00C660D3 /* Checkpoint.h */,
+				FF5D2CDC20B409CB00C660D3 /* Checkpoint.m */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -262,10 +277,13 @@
 				FF5D2CD720B2C1E900C660D3 /* LockKnifeNode.m in Sources */,
 				FF6D3DD420A9661500806197 /* AppDelegate.m in Sources */,
 				FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */,
+				FF5D2CDD20B409CB00C660D3 /* Checkpoint.m in Sources */,
 				FF6D3DD520A9661500806197 /* GameScene.m in Sources */,
 				FF963A1720AD55830025674C /* BackgroundNode.m in Sources */,
+				FF5D2CDA20B3A49300C660D3 /* GameTool.m in Sources */,
 				FF6D3DC620A965AD00806197 /* TreeringTurntable.m in Sources */,
 				FF5D2CD120B28BC300C660D3 /* MeunScene.m in Sources */,
+				FF5D2CE020B41DBE00C660D3 /* IndicatorNode.m in Sources */,
 				FF6D3DB120A9276100806197 /* KnifeNode.m in Sources */,
 				FF5D2CCE20B28A8F00C660D3 /* TitltNode.m in Sources */,
 			);

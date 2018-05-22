@@ -10,4 +10,6 @@
 
 @interface TitltNode : SKSpriteNode
 
+- (void)resetTitleNodeTexture;
+
 @end
