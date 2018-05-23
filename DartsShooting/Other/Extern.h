@@ -29,6 +29,7 @@ UIKIT_EXTERN NSInteger const Startzposition;
 UIKIT_EXTERN NSInteger const Pausezposition;
 UIKIT_EXTERN NSInteger const MaskBGzposition;//蒙版
 UIKIT_EXTERN NSInteger const HomeNodezposition;
+UIKIT_EXTERN NSInteger const Gameoverzposition;
 
 // nodeName
 UIKIT_EXTERN NSString * const StartName;

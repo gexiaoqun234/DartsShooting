@@ -17,6 +17,17 @@
 #define TWSizeRatio           (TWScreenWidth / 375.0)
 #define TW_SizeRatio(a)       ((a) * TWSizeRatio)
 
+#define BrokenTime 1.0
+
+// 指示器
+#define IndicatorNodeAllW TWScreenWidth * 0.6
+// 每排放5个 每一个的宽度
+#define IndicatorNodeOneW IndicatorNodeAllW * 0.2
+// 每一个的高度
+#define IndicatorNodeOneH 70 * IndicatorNodeOneW / 50.0
+// 总高度
+#define IndicatorNodeAllH 2 * IndicatorNodeOneH
+
 // 游戏币
 #define appleW TW_SizeRatio(30)
 #define appleH appleW * 86 / 65.0

@@ -24,7 +24,7 @@ NSInteger const Startzposition = 40;//开始按钮
 NSInteger const Pausezposition = 45;// 暂停按钮
 NSInteger const MaskBGzposition = 50;//蒙版
 NSInteger const HomeNodezposition = 60;
-
+NSInteger const Gameoverzposition = 70;
 
 NSString * const StartName = @"StartName";
 NSString * const Music = @"Music";

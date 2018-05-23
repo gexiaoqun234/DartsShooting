@@ -10,6 +10,7 @@
 
 @interface TreeringTurntable : SKSpriteNode
 
+- (void)addApple:(NSArray *)appleCoordinate;    // 根据传来的苹果坐标数组来添加苹果
 - (void)run;
 - (void)stop;
 

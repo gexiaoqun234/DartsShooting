@@ -7,6 +7,7 @@
 //  树轮转盘
 
 #import "TreeringTurntable.h"
+#import "AppleNode.h"
 
 @interface TreeringTurntable()
 @property (nonatomic, strong) NSMutableArray <SKAction *>* actionArray;
@@ -36,6 +37,16 @@
         self.physicsBody.collisionBitMask = KnifeCategory;
     }
     return self;
+}
+
+- (void)addApple:(NSArray *)appleCoordinate{
+    CGFloat appleW_small = TW_SizeRatio(25);
+    for (NSInteger i = 0; i < appleCoordinate.count; i++) {
+        NSDictionary * dic = appleCoordinate[i];
+        AppleNode * apple = [[AppleNode alloc]initWithTexture:[SKTexture textureWithImageNamed:@"apple-sheet0"] color:[UIColor whiteColor] size:CGSizeMake(appleW_small, appleW_small * 69 / 52.0)];
+        apple.position = CGPointMake([dic[@"x"] floatValue], [dic[@"y"] floatValue]);
+        [self addChild:apple];
+    }
 }
 
 - (void)run{

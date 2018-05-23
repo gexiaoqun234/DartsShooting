@@ -10,12 +10,14 @@
 
 @interface IndicatorNode : SKSpriteNode
 
-+ (instancetype)createIndicatorNode;
-
 // 初始化设置一共多少根
 - (void)setIndicatorNode:(NSInteger)number;
-// 重设_已经使用了多少根
-- (void)resetIndicatorNode:(NSInteger)number;
+
+// 减去一根
+- (void)minusARoot;
+
+// 重设_共几根，已经使用了多少根
+- (void)resetIndicatorNodeAllCount:(NSInteger)allNumber userCount:(NSInteger)userNumber;
 
 
 @end

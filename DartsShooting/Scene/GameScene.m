@@ -11,6 +11,9 @@
 #import "KnifeNode.h"
 #import "BackgroundNode.h"
 #import "MeunScene.h"
+#import "IndicatorNode.h"
+#import "BrokenNode.h"
+#import "AppleNode.h"
 
 @interface GameScene()<SKPhysicsContactDelegate>
 @property (nonatomic, strong) TreeringTurntable * treeringTurntable;
@@ -18,6 +21,7 @@
 @property (nonatomic, assign) BOOL allRotate;// 用来标识所有的刀是否都被发射出去了
 @property (nonatomic, strong) SKEmitterNode * appleShootingEmitter;
 @property (nonatomic, strong) SKEmitterNode * tuckedInEmitter;  // 扎进去
+@property (nonatomic, strong) SKEmitterNode * knifeBrokenEmitter;
 @property (nonatomic, strong) SKSpriteNode * appleNode;
 @property (nonatomic, strong) SKLabelNode * appleCountNode;
 @property (nonatomic, strong) SKLabelNode * scoreLabel;
@@ -25,7 +29,7 @@
 @property (nonatomic, strong) SKLabelNode * highestScoreLabel;// 历史最高分分数
 @property (nonatomic, strong) SKAction * fadeAction;
 
-@property (nonatomic, strong) SKSpriteNode * indicatorNode;// 指示器
+@property (nonatomic, strong) IndicatorNode * indicatorNode;// 指示器
 
 @property (nonatomic, assign) NSInteger currentScore;
 @property (nonatomic, assign) NSInteger appleCount;
@@ -35,7 +39,15 @@
 @property (nonatomic, strong) SKSpriteNode * continueNode;
 @property (nonatomic, strong) SKSpriteNode * homeNode;
 
-@property (nonatomic, assign) NSInteger knifeCount;
+@property (nonatomic, assign) NSUInteger currentCheckpointNum;//当前关卡数
+@property (nonatomic, strong) Checkpoint * currentCheckpoint;//当前关卡对象
+@property (nonatomic, assign) BOOL currentCheckpointComplete;//当前关卡已经完成
+
+@property (nonatomic, assign) NSInteger shootKnife;
+
+@property (nonatomic, strong) BrokenNode * brokenNode;
+
+@property (nonatomic, strong) SKSpriteNode * gameoverNode;
 @end
 
 @implementation GameScene
@@ -43,10 +55,15 @@
 #pragma mark - --------系统回调函数--------
 - (void)didMoveToView:(SKView *)view{
     self.backgroundColor = GAMEBGCOLOR;
-    
+    _shootKnife = 0;
     _currentScore = 0;
-    _knifeCount = 100;
     _appleCount = [[GameTool shareManager] getGameMoney];
+    // 获取关卡
+    _currentCheckpointNum = 0;
+    _currentCheckpointComplete = NO;
+    _currentCheckpoint = [[GameTool shareManager] getCheckpoint:_currentCheckpointNum];
+    // 初始设置基础内容
+    [self resetCheckpointContent];
     
     // 设置背景
     [self addChild:[BackgroundNode initializeBackgroundNode]];
@@ -55,6 +72,7 @@
     [self.treeringTurntable run];
     // 添加第一把刀
     [self addChild:[self.knifeNodeArray firstObject]];
+    // 计数器
     [self addChild:self.indicatorNode];
     // 添加游戏币
     [self addChild:self.appleNode];
@@ -73,6 +91,8 @@
     [self.tuckedInEmitter setHidden:YES];
     [self addChild:self.appleShootingEmitter];
     [self.appleShootingEmitter setHidden:YES];
+    [self addChild:self.knifeBrokenEmitter];
+    [self.knifeBrokenEmitter setHidden:YES];
     
     // 物理特性
     self.physicsWorld.contactDelegate = self;
@@ -80,43 +100,125 @@
     self.physicsBody.categoryBitMask = WordCategory;
 }
 
+- (void)update:(NSTimeInterval)currentTime{
+    if (_currentCheckpointComplete) {
+        // 关卡数加1
+        _currentCheckpointNum++;
+        // 重设基础内容
+        [self resetCheckpointContent];
+    }
+}
+
+// 重设基础内容
+- (void)resetCheckpointContent{
+    // 刀的数量重置
+    [self.indicatorNode setIndicatorNode:_currentCheckpoint.knifes];
+    // 苹果的摆放位置
+    [self.treeringTurntable addApple:_currentCheckpoint.applesCoordinates];
+}
+
+// 增加刀飞舞的效果
+- (void)addKnifeFly{
+    // 这是树轮所在的区间
+    CGFloat maxX = TWScreenWidth * 0.75;
+    CGFloat minX = TWScreenWidth * 0.25;
+    CGFloat maxY = TWScreenHeight * 0.7 + minX;
+    CGFloat minY = TWScreenHeight * 0.7 - minX;
+    
+    for (NSInteger i = 0; i < _currentCheckpoint.knifes; i++) {
+        NSInteger randomX = [self getRandomNumber:minX to:maxX];
+        NSInteger randomY = [self getRandomNumber:minY to:maxY];
+        NSInteger randomIR = [self getRandomAngle];
+        NSInteger randomR = [self getRandomAngle];
+        SKTexture * texture = [SKTexture textureWithImageNamed:[[GameTool shareManager] getChooesKnife]];
+        SKSpriteNode * knifeNode = [[SKSpriteNode alloc]initWithTexture:texture color:[UIColor whiteColor] size:CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25)];
+        knifeNode.position = CGPointMake(randomX,randomY);
+        [knifeNode runAction:[SKAction rotateByAngle:randomR duration:0]];
+        [self addChild:knifeNode];
+        [knifeNode runAction:[SKAction group:@[[SKAction rotateByAngle:randomIR duration:BrokenTime],[SKAction fadeOutWithDuration:BrokenTime]]] completion:^{
+            [knifeNode removeFromParent];
+            [knifeNode removeAllActions];
+        }];
+    }
+}
+
+// 获取自from到to的随机整数值
+- (NSInteger)getRandomNumber:(int)from to:(int)to{
+    return (NSInteger)(from + (arc4random() % (to - from + 1)));
+}
+
+// 随机一个刀的角度
+- (CGFloat)getRandomAngle{
+    NSInteger randomN = arc4random() % 10 + 1;
+    CGFloat randomNu = randomN / 10.0;
+    CGFloat mun = M_PI * 2 * randomNu;
+    return mun;
+}
+
 #pragma mark - --------SKPhysicsContactDelegate--------
 - (void)didBeginContact:(SKPhysicsContact *)contact{
     if (contact.bodyA.categoryBitMask == KnifeCategory && contact.bodyB.categoryBitMask == KnifeCategory) {
-        NSLog(@"刀刀相撞");
-        // 保存数据
+        // 移调那两把刀
+        [(KnifeNode *)contact.bodyA.node removeFromParent];
+        [(KnifeNode *)contact.bodyB.node removeFromParent];
+        [(KnifeNode *)contact.bodyA.node removeAllActions];
+        [(KnifeNode *)contact.bodyB.node removeAllActions];
         
         
-        // 游戏结束
+        // 刀碰撞的效果
+        [self.tuckedInEmitter setHidden:YES];
+        [self.knifeBrokenEmitter setHidden:NO];
+        [self.knifeBrokenEmitter resetSimulation];
+        
+        // 保存数据游戏结束
+        [self.treeringTurntable stop];
+        [self.knifeNodeArray[0] stop];
         // 保存当前得分
         [[GameTool shareManager] saveCurrentScore:_currentScore];
         [[GameTool shareManager] saveBestScore:_currentScore];
+        
+        
+//        [self addChild:self.gameoverNode];
+        // 跳转到首页
+//        MeunScene * meunScene = [[MeunScene alloc]initWithSize:self.size];
+//        [self.gameoverNode runAction:[SKAction fadeOutWithDuration:2.0] completion:^{
+//            [self.view presentScene:meunScene];
+//        }];
     }
     
     if (contact.bodyA.categoryBitMask == AppleCategory || contact.bodyB.categoryBitMask == AppleCategory) {
-        NSLog(@"刀苹果相撞");
+    
+        AppleNode * apple;
+        if (contact.bodyA.categoryBitMask == AppleCategory) {
+            apple = (AppleNode *)contact.bodyA.node;
+        } else {
+            apple = (AppleNode *)contact.bodyB.node;
+        }
+        [apple removeFromParent];
+        
+        [self.tuckedInEmitter setHidden:YES];
+        [self.knifeBrokenEmitter setHidden:YES];
+        [self.appleShootingEmitter setHidden:NO];
+        [self.appleShootingEmitter resetSimulation];
+        
         // 增加游戏币
-        _appleCount = _appleCount++;
+        _appleCount++;
+        self.appleCountNode.text = [NSString stringWithFormat:@"%ld",_appleCount];
         // 保存游戏币
         [[GameTool shareManager] saveGameMoney:_appleCount];
     }
     
-    if (contact.bodyA.categoryBitMask == TreeringTurntableCategory || contact.bodyB.categoryBitMask == TreeringTurntableCategory) {
-        
-        if (self.knifeNodeArray.count > 0) {
-            NSLog(@"刀树相撞");
-            _currentScore++;
-            
-            // 保存当前得分
-            [[GameTool shareManager] saveCurrentScore:_currentScore];
-            [[GameTool shareManager] saveBestScore:_currentScore];
-            
-        } else {
-            // 当到全部用完，树散
-            
-            // 进入下关
-        }
-    }
+//    if (contact.bodyA.categoryBitMask == TreeringTurntableCategory || contact.bodyB.categoryBitMask == TreeringTurntableCategory) {
+
+//        NSLog(@"**");
+//
+//        _currentScore++;
+//        _scoreLabel.text = [NSString stringWithFormat:@"%ld",_currentScore];
+//
+//        // 保存当前得分
+//        [[GameTool shareManager] saveCurrentScore:_currentScore];
+//        [[GameTool shareManager] saveBestScore:_currentScore];
+//    }
 }
 
 #pragma mark - --------点击事件--------
@@ -126,11 +228,15 @@
     SKSpriteNode * node = (SKSpriteNode *)[self nodeAtPoint:positionInScene];
     if ([node.name isEqualToString:Pause]) {
         [self.treeringTurntable stop];
-        [self.knifeNodeArray[0] stop];
+        if (_allRotate == NO) {
+            [self.knifeNodeArray[0] stop];
+        }
         [self addChild:self.maskNode];
     } else if ([node.name isEqualToString:Continue]) {
         [self.treeringTurntable run];
-        [self.knifeNodeArray[0] run];
+        if (_allRotate == NO) {
+            [self.knifeNodeArray[0] run];
+        }
         [self.maskNode removeFromParent];
     } else if ([node.name isEqualToString:Home]) {
         [[GameTool shareManager] saveCurrentScore:_currentScore];
@@ -148,6 +254,13 @@
                 // 从当前场景移除，并且移除自带的动作
                 [self.knifeNodeArray[0] removeAllActions];
                 [self.knifeNodeArray[0] removeFromParent];
+                
+                
+                // 不需要管越界，因为发射完旧不会进到这里
+                self.shootKnife++;
+                //计数器减1
+                [self.indicatorNode resetIndicatorNodeAllCount:self.currentCheckpoint.knifes userCount:self.shootKnife];
+                
                 
 #pragma mark - --------计算夹角的弧度--------
                 // *******计算夹角的弧度*******
@@ -223,9 +336,27 @@
                     [self addChild:self.knifeNodeArray[0]];
                 }
                 
+                self.currentScore++;
+                self.scoreLabel.text = [NSString stringWithFormat:@"%ld",self.currentScore];
+
+                // 保存当前得分
+                [[GameTool shareManager] saveCurrentScore:self.currentScore];
+                [[GameTool shareManager] saveBestScore:self.currentScore];
+                
                 if (self.knifeNodeArray.count == 0) {
                     self.allRotate = YES;
-                    NSLog(@"全部发射完毕");
+//                    NSLog(@"全部发射完毕");
+
+                    // 去掉树轮
+                    [self.treeringTurntable removeAllChildren];
+                    [self.treeringTurntable removeAllActions];
+                    [self.treeringTurntable removeFromParent];
+                    // 增加树轮破烂效果
+                    [self addChild:self.brokenNode];
+                    // 增加乱箭飞舞的效果
+                    [self addKnifeFly];
+                    
+                    
                 }
             }];
         }
@@ -259,7 +390,7 @@
         _knifeNodeArray = [NSMutableArray array];
  
         // 创建刀
-        for (NSInteger i = 0; i < _knifeCount; i++) {
+        for (NSInteger i = 0; i < _currentCheckpoint.knifes; i++) {
             SKTexture * texture = [SKTexture textureWithImageNamed:[[GameTool shareManager] getChooesKnife]];
             KnifeNode * knifeNode = [[KnifeNode alloc]initWithTexture:texture color:[UIColor clearColor] size:CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25)];
             knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(127));
@@ -304,36 +435,30 @@
     return _homeNode;
 }
 
-#pragma mark - --------指示器--------
-- (SKSpriteNode *)indicatorNode{
-    if (_indicatorNode == nil) {
-        
-        // 最多可以有10根刀
-        
-        // 先使用占位的占满
-        CGFloat allW = TWScreenWidth * 0.6;
-        // 每排放5个
-        CGFloat oneW = allW * 0.2;
-        // 计算高度
-        CGFloat oneH = 70 * oneW / 50.0;
-        // 一共2排
-        CGFloat allH = 2 * oneH;
-        
-        _indicatorNode = [[SKSpriteNode alloc]initWithColor:[UIColor clearColor] size:CGSizeMake(allW, allH)];
-        _indicatorNode.position = CGPointMake(TWScreenWidth * 0.6, oneH);
-        
-        // yellowKnife
+- (SKSpriteNode *)gameoverNode{
+    if (_gameoverNode == nil) {
+        _gameoverNode = [[SKSpriteNode alloc]initWithColor:GAMEBGCOLOR size:self.size];
+        _gameoverNode.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.5);
+        _gameoverNode.zPosition = Gameoverzposition;
+    }
+    return _gameoverNode;
+}
 
-        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW * 2, oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW, oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(0, oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW, oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW * 2, oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW * 2, -oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(-oneW, -oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(0, -oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW, -oneH * 0.5)]];
-        [_indicatorNode addChild:[self creactNode:CGPointMake(oneW * 2, -oneH * 0.5)]];
+#pragma mark - --------树轮击碎--------
+- (BrokenNode *)brokenNode{
+    if (_brokenNode == nil) {
+        _brokenNode = [[BrokenNode alloc]initWithColor:[UIColor clearColor] size:CGSizeMake(TWScreenWidth * 0.5, TWScreenWidth * 0.5)];
+        _brokenNode.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7);
+    }
+    return _brokenNode;
+}
+
+
+#pragma mark - --------指示器--------
+- (IndicatorNode *)indicatorNode{
+    if (_indicatorNode == nil) {
+        _indicatorNode = [[IndicatorNode alloc]initWithColor:[UIColor clearColor] size:CGSizeMake(IndicatorNodeAllW, IndicatorNodeAllH)];
+        _indicatorNode.position = CGPointMake(TWScreenWidth * 0.6, IndicatorNodeOneH);
     }
     return _indicatorNode;
 }
@@ -417,6 +542,15 @@
         _appleShootingEmitter.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
     }
     return _appleShootingEmitter;
+}
+
+- (SKEmitterNode *)knifeBrokenEmitter{
+    if (_knifeBrokenEmitter == nil) {
+        _knifeBrokenEmitter = [SKEmitterNode nodeWithFileNamed:@"KnifeBroken.sks"];
+        _knifeBrokenEmitter.particleTexture = [SKTexture textureWithImageNamed:[[GameTool shareManager] getChooesKnife]];
+        _knifeBrokenEmitter.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - TWScreenWidth * 0.25);
+    }
+    return _knifeBrokenEmitter;
 }
 
 #pragma mark - --------action懒加载--------

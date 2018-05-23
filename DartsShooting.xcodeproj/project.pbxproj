@@ -29,6 +29,9 @@
 		FF963A1720AD55830025674C /* BackgroundNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FF963A1620AD55830025674C /* BackgroundNode.m */; };
 		FF963A1920AD629C0025674C /* TuckedIn.sks in Resources */ = {isa = PBXBuildFile; fileRef = FF963A1820AD629C0025674C /* TuckedIn.sks */; };
 		FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA33E0720ABCA82009FAC2B /* TEMP.m */; };
+		FFB3165B20B516F000B49EAB /* BrokenNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB3165A20B516F000B49EAB /* BrokenNode.m */; };
+		FFB3166520B5540A00B49EAB /* KnifeBroken.sks in Resources */ = {isa = PBXBuildFile; fileRef = FFB3166320B5540A00B49EAB /* KnifeBroken.sks */; };
+		FFB3166920B55E9100B49EAB /* AppleNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB3166820B55E9100B49EAB /* AppleNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +76,11 @@
 		FF963A1820AD629C0025674C /* TuckedIn.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TuckedIn.sks; sourceTree = "<group>"; };
 		FFA33E0620ABCA82009FAC2B /* TEMP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TEMP.h; sourceTree = "<group>"; };
 		FFA33E0720ABCA82009FAC2B /* TEMP.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TEMP.m; sourceTree = "<group>"; };
+		FFB3165920B516F000B49EAB /* BrokenNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrokenNode.h; sourceTree = "<group>"; };
+		FFB3165A20B516F000B49EAB /* BrokenNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrokenNode.m; sourceTree = "<group>"; };
+		FFB3166320B5540A00B49EAB /* KnifeBroken.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = KnifeBroken.sks; sourceTree = "<group>"; };
+		FFB3166720B55E9100B49EAB /* AppleNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleNode.h; sourceTree = "<group>"; };
+		FFB3166820B55E9100B49EAB /* AppleNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppleNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +151,10 @@
 				FF5D2CD620B2C1E900C660D3 /* LockKnifeNode.m */,
 				FF5D2CDE20B41DBE00C660D3 /* IndicatorNode.h */,
 				FF5D2CDF20B41DBE00C660D3 /* IndicatorNode.m */,
+				FFB3165920B516F000B49EAB /* BrokenNode.h */,
+				FFB3165A20B516F000B49EAB /* BrokenNode.m */,
+				FFB3166720B55E9100B49EAB /* AppleNode.h */,
+				FFB3166820B55E9100B49EAB /* AppleNode.m */,
 			);
 			path = Node;
 			sourceTree = "<group>";
@@ -152,6 +164,7 @@
 			children = (
 				FF6D3DD620A9662C00806197 /* AppleShooting.sks */,
 				FF963A1820AD629C0025674C /* TuckedIn.sks */,
+				FFB3166320B5540A00B49EAB /* KnifeBroken.sks */,
 			);
 			path = Emitter;
 			sourceTree = "<group>";
@@ -255,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF6D3D9B20A91F6100806197 /* Main.storyboard in Resources */,
+				FFB3166520B5540A00B49EAB /* KnifeBroken.sks in Resources */,
 				FF6D3DD720A9662C00806197 /* AppleShooting.sks in Resources */,
 				FF6D3D9D20A91F6300806197 /* Assets.xcassets in Resources */,
 				FF5D2CC820B2646D00C660D3 /* 309.TTF in Resources */,
@@ -271,10 +285,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF6D3DD320A9661500806197 /* main.m in Sources */,
+				FFB3165B20B516F000B49EAB /* BrokenNode.m in Sources */,
 				FF6D3DDC20A9671100806197 /* Extern.m in Sources */,
 				FF6D3DD220A9661500806197 /* GameViewController.m in Sources */,
 				FF5D2CCB20B2686600C660D3 /* SKLabelNode+CreateLabel.m in Sources */,
 				FF5D2CD720B2C1E900C660D3 /* LockKnifeNode.m in Sources */,
+				FFB3166920B55E9100B49EAB /* AppleNode.m in Sources */,
 				FF6D3DD420A9661500806197 /* AppDelegate.m in Sources */,
 				FFA33E0820ABCA82009FAC2B /* TEMP.m in Sources */,
 				FF5D2CDD20B409CB00C660D3 /* Checkpoint.m in Sources */,
@@ -434,7 +450,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.MG.DartsShooting;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moxidevb.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -453,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.MG.DartsShooting;
+				PRODUCT_BUNDLE_IDENTIFIER = com.moxidevb.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
