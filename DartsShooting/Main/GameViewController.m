@@ -47,13 +47,20 @@
     // 创建第一个关卡的数据内容
     Checkpoint * one = [[Checkpoint alloc]init];
     one.checkpointCount = 1;
-    one.knifes = 10;
+    one.knifes = 5;
     one.apples = 1;
 //    one.applesCoordinates = @[@{@"x":[NSString stringWithFormat:@"%.2f",TWScreenWidth * 0.25],@"y":@(0)}];
+
+    // 创建第二个关卡的数据内容
+    Checkpoint * two = [[Checkpoint alloc]init];
+    two.checkpointCount = 2;
+    two.knifes = 10;
+    two.apples = 3;
+    //    one.applesCoordinates = @[@{@"x":[NSString stringWithFormat:@"%.2f",TWScreenWidth * 0.25],@"y":@(0)}];
     
     NSMutableArray * dataArray = [NSMutableArray arrayWithCapacity:10];
     [dataArray addObject:one];
-    
+    [dataArray addObject:two];
     [[GameTool shareManager] saveCheckpoint:dataArray];
 }
 

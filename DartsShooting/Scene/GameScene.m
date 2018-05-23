@@ -104,8 +104,11 @@
     if (_currentCheckpointComplete) {
         // 关卡数加1
         _currentCheckpointNum++;
+        // 获取新的关卡
+        _currentCheckpoint = [[GameTool shareManager] getCheckpoint:_currentCheckpointNum];
         // 重设基础内容
         [self resetCheckpointContent];
+        _currentCheckpointComplete = NO;
     }
 }
 
@@ -204,7 +207,7 @@
         
         // 增加游戏币
         _appleCount++;
-        self.appleCountNode.text = [NSString stringWithFormat:@"%ld",_appleCount];
+        self.appleCountNode.text = [NSString stringWithFormat:@"%ld",(long)_appleCount];
         // 保存游戏币
         [[GameTool shareManager] saveGameMoney:_appleCount];
     }
@@ -338,7 +341,7 @@
                 }
                 
                 self.currentScore++;
-                self.scoreLabel.text = [NSString stringWithFormat:@"%ld",self.currentScore];
+                self.scoreLabel.text = [NSString stringWithFormat:@"%ld",(long)self.currentScore];
 
                 // 保存当前得分
                 [[GameTool shareManager] saveCurrentScore:self.currentScore];
@@ -357,7 +360,11 @@
                     // 增加乱箭飞舞的效果
                     [self addKnifeFly];
                     
+                    // 当前关卡完成
+                    self.currentCheckpointComplete = YES;
                     
+                    // 移除树轮和刀，载添加
+//                    [self.treeringTurntable removeFromParent];
                 }
             }];
         }
@@ -505,7 +512,7 @@
 - (SKLabelNode *)highestScoreLabel{
     if (_highestScoreLabel == nil) {
         CGFloat textW = [SKLabelNode calculateTheLengthOfTextWithText:BestScore fontName:DefaultFontName fontSize:TW_SizeRatio(20)].width;
-        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getBestScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(20) withFontName:DefaultFontName withPosition: CGPointMake(textW * 0.5 + TW_SizeRatio(10), TWScreenHeight - TW_SizeRatio(45) - TW_SizeRatio(20))];
+        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",(long)[[GameTool shareManager] getBestScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(20) withFontName:DefaultFontName withPosition: CGPointMake(textW * 0.5 + TW_SizeRatio(10), TWScreenHeight - TW_SizeRatio(45) - TW_SizeRatio(20))];
         [_highestScoreLabel runAction:self.fadeAction];
     }
     return _highestScoreLabel;
@@ -523,7 +530,7 @@
 
 - (SKLabelNode *)appleCountNode{
     if (_appleCountNode == nil) {
-        _appleCountNode = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getGameMoney]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeLeft withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth - 3 * appleW - TW_SizeRatio(10), TWScreenHeight - appleH - TW_SizeRatio(25))];
+        _appleCountNode = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",(long)[[GameTool shareManager] getGameMoney]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeLeft withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth - 3 * appleW - TW_SizeRatio(10), TWScreenHeight - appleH - TW_SizeRatio(25))];
     }
     return _appleCountNode;
 }

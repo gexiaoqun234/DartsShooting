@@ -209,7 +209,7 @@
         // 4保存进以解锁的刀
         [[GameTool shareManager] saveUnlockKnife:node.name];
         // 5显示新的余额
-        self.appleCountNode.text = [NSString stringWithFormat:@"%ld",money];
+        self.appleCountNode.text = [NSString stringWithFormat:@"%ld",(long)money];
     } else {
         // 提示钱不够
         [self.maskNode addChild:self.tipNode];
@@ -247,7 +247,7 @@
 - (SKLabelNode *)appleCountNode{
     if (_appleCountNode == nil) {
         CGFloat textW = [SKLabelNode calculateTheLengthOfTextWithText:BestScore fontName:DefaultFontName fontSize:TW_SizeRatio(30)].width;
-        _appleCountNode = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getGameMoney]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(appleW + textW * 0.5,TWScreenWidth * 0.8 * 0.5 + appleH - TW_SizeRatio(5))];
+        _appleCountNode = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",(long)[[GameTool shareManager] getGameMoney]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:TWColorRGB(222, 55, 44) withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(appleW + textW * 0.5,TWScreenWidth * 0.8 * 0.5 + appleH - TW_SizeRatio(5))];
     }
     return _appleCountNode;
 }
@@ -492,7 +492,7 @@
 
 - (SKLabelNode *)lastScore{
     if (_lastScore == nil) {
-        _lastScore = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getCurrentScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.75, TWScreenHeight - (TWScreenHeight - (TWScreenHeight * 0.7 + TWScreenWidth * 0.25)) * 0.5 - TW_SizeRatio(30))];
+        _lastScore = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",(long)[[GameTool shareManager] getCurrentScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.75, TWScreenHeight - (TWScreenHeight - (TWScreenHeight * 0.7 + TWScreenWidth * 0.25)) * 0.5 - TW_SizeRatio(30))];
         [_lastScore runAction:self.fadeAction];
     }
     return _lastScore;
@@ -500,7 +500,7 @@
 
 - (SKLabelNode *)highestScoreLabel{
     if (_highestScoreLabel == nil) {
-        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",[[GameTool shareManager] getBestScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.25, TWScreenHeight - (TWScreenHeight - (TWScreenHeight * 0.7 + TWScreenWidth * 0.25)) * 0.5 - TW_SizeRatio(30))];
+        _highestScoreLabel = [SKLabelNode createLabelNodeWithText:[NSString stringWithFormat:@"%ld",(long)[[GameTool shareManager] getBestScore]] withVerticalAlignmentMode:SKLabelVerticalAlignmentModeCenter withHorizontalAlignmentMode:SKLabelHorizontalAlignmentModeCenter withFontColor:[SKColor whiteColor] withFontSize:TW_SizeRatio(30) withFontName:DefaultFontName withPosition: CGPointMake(TWScreenWidth * 0.25, TWScreenHeight - (TWScreenHeight - (TWScreenHeight * 0.7 + TWScreenWidth * 0.25)) * 0.5 - TW_SizeRatio(30))];
         [_highestScoreLabel runAction:self.fadeAction];
     }
     return _highestScoreLabel;
