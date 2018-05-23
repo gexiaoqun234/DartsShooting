@@ -44,7 +44,8 @@
     for (NSInteger i = 0; i < appleCoordinate.count; i++) {
         NSDictionary * dic = appleCoordinate[i];
         AppleNode * apple = [[AppleNode alloc]initWithTexture:[SKTexture textureWithImageNamed:@"apple-sheet0"] color:[UIColor whiteColor] size:CGSizeMake(appleW_small, appleW_small * 69 / 52.0)];
-        apple.position = CGPointMake([dic[@"x"] floatValue], [dic[@"y"] floatValue]);
+        apple.position = CGPointMake([dic[CoordinatesX] floatValue], [dic[CoordinatesY] floatValue]);
+        apple.zRotation = [dic[CoordinatesZRotation] floatValue];
         [self addChild:apple];
     }
 }

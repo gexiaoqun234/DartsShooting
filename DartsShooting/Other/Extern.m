@@ -60,8 +60,9 @@ NSString * const UnlockKnifeArray = @"UnlockKnifeArray";//已经解锁的刀的�
 NSString * const CheckpointString = @"CheckpointString";
 
 
-
-
+NSString * const CoordinatesX = @"CoordinatesX";
+NSString * const CoordinatesY = @"CoordinatesY";
+NSString * const CoordinatesZRotation = @"CoordinatesZRotation";
 
 
 

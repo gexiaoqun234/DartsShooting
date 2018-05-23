@@ -54,6 +54,9 @@
     [self addChild:self.highestScoreLabel];
     [self addChild:self.lastScore];
     [self addChild:self.toolNode];
+    
+    
+    
 }
 
 

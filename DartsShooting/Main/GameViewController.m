@@ -49,13 +49,14 @@
     one.checkpointCount = 1;
     one.knifes = 10;
     one.apples = 1;
-    one.applesCoordinates = @[@{@"x":[NSString stringWithFormat:@"%.2f",TWScreenWidth * 0.25],@"y":@(0)}];
+//    one.applesCoordinates = @[@{@"x":[NSString stringWithFormat:@"%.2f",TWScreenWidth * 0.25],@"y":@(0)}];
     
     NSMutableArray * dataArray = [NSMutableArray arrayWithCapacity:10];
     [dataArray addObject:one];
     
     [[GameTool shareManager] saveCheckpoint:dataArray];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

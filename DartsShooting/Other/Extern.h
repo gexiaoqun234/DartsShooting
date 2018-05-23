@@ -66,7 +66,8 @@ UIKIT_EXTERN NSString * const WhichKnife;//选中的哪一把到
 UIKIT_EXTERN NSString * const UnlockKnifeArray;//已经解锁的刀的数组
 UIKIT_EXTERN NSString * const CheckpointString;// 关卡字符串
 
-
-
+UIKIT_EXTERN NSString * const CoordinatesX;
+UIKIT_EXTERN NSString * const CoordinatesY;
+UIKIT_EXTERN NSString * const CoordinatesZRotation;
 
 

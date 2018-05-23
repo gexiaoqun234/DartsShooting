@@ -133,7 +133,8 @@
         SKTexture * texture = [SKTexture textureWithImageNamed:[[GameTool shareManager] getChooesKnife]];
         SKSpriteNode * knifeNode = [[SKSpriteNode alloc]initWithTexture:texture color:[UIColor whiteColor] size:CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25)];
         knifeNode.position = CGPointMake(randomX,randomY);
-        [knifeNode runAction:[SKAction rotateByAngle:randomR duration:0]];
+//        [knifeNode runAction:[SKAction rotateByAngle:randomR duration:0]];
+        knifeNode.zRotation = randomR;
         [self addChild:knifeNode];
         [knifeNode runAction:[SKAction group:@[[SKAction rotateByAngle:randomIR duration:BrokenTime],[SKAction fadeOutWithDuration:BrokenTime]]] completion:^{
             [knifeNode removeFromParent];
