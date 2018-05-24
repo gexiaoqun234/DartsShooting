@@ -19,10 +19,13 @@
 
 #define BrokenTime 1.0
 
+// 总的关卡数
+#define CheckpointCount 50
+
 // 指示器
 #define IndicatorNodeAllW TWScreenWidth * 0.6
-// 每排放5个 每一个的宽度
-#define IndicatorNodeOneW IndicatorNodeAllW * 0.2
+// 每排放10个 每一个的宽度
+#define IndicatorNodeOneW IndicatorNodeAllW * 0.1
 // 每一个的高度
 #define IndicatorNodeOneH 70 * IndicatorNodeOneW / 50.0
 // 总高度

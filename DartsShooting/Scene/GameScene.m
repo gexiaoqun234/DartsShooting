@@ -56,14 +56,26 @@
 - (void)didMoveToView:(SKView *)view{
     self.backgroundColor = GAMEBGCOLOR;
     _shootKnife = 0;
-    _currentScore = 0;
+    _currentScore = [[GameTool shareManager] getCurrentScore];
+    self.scoreLabel.text = [NSString stringWithFormat:@"%ld",(long)_currentScore];
     _appleCount = [[GameTool shareManager] getGameMoney];
     // 获取关卡
-    _currentCheckpointNum = 0;
+    _currentCheckpointNum = [[GameTool shareManager] getCheckpointNumber];
     _currentCheckpointComplete = NO;
-    _currentCheckpoint = [[GameTool shareManager] getCheckpoint:_currentCheckpointNum];
-    // 初始设置基础内容
-    [self resetCheckpointContent];
+    _currentCheckpoint = [[GameTool shareManager] getCheckpoint:_currentCheckpointNum - 1];
+
+    // 指示器中刀的数量重置
+    [self.indicatorNode setIndicatorNode:_currentCheckpoint.knifes];
+    
+    // 苹果的摆放位置
+    NSMutableArray * coorfinatesA = [NSMutableArray arrayWithCapacity:_currentCheckpoint.apples];
+    for (NSInteger i = 0; i < _currentCheckpoint.apples; i++) {
+        NSInteger random = arc4random() % (_currentCheckpoint.applesCoordinates.count);
+        [coorfinatesA addObject:_currentCheckpoint.applesCoordinates[random]];
+    }
+    [self.treeringTurntable addApple:coorfinatesA];
+    
+    NSLog(@"当前是第%lu关",(unsigned long)_currentCheckpointNum);
     
     // 设置背景
     [self addChild:[BackgroundNode initializeBackgroundNode]];
@@ -72,6 +84,7 @@
     [self.treeringTurntable run];
     // 添加第一把刀
     [self addChild:[self.knifeNodeArray firstObject]];
+    
     // 计数器
     [self addChild:self.indicatorNode];
     // 添加游戏币
@@ -102,22 +115,57 @@
 
 - (void)update:(NSTimeInterval)currentTime{
     if (_currentCheckpointComplete) {
-        // 关卡数加1
-        _currentCheckpointNum++;
-        // 获取新的关卡
-        _currentCheckpoint = [[GameTool shareManager] getCheckpoint:_currentCheckpointNum];
-        // 重设基础内容
-        [self resetCheckpointContent];
-        _currentCheckpointComplete = NO;
+        
+        NSLog(@"%ld",(long)[[GameTool shareManager] getCheckpointCount]);
+        if ([[GameTool shareManager] getCheckpointCount] > _currentCheckpointNum) {
+            // 关卡数加1
+            _currentCheckpointNum++;
+            [[GameTool shareManager] saveCheckpointNumber:_currentCheckpointNum];
+            //        // 获取新的关卡
+            //        _currentCheckpoint = [[GameTool shareManager] getCheckpoint:_currentCheckpointNum];
+            //        // 重设基础内容
+            //        [self resetCheckpointContent];
+            _currentCheckpointComplete = NO;
+            
+            GameScene * game = [[GameScene alloc]initWithSize:self.size];
+            SKTransition * transition = [SKTransition fadeWithColor:GAMEBGCOLOR duration:BrokenTime];
+             [self.view presentScene:game transition:transition];
+        } else {
+            NSLog(@"完成所有关卡");
+            
+            _currentCheckpointComplete = NO;
+            
+            // 跳转到首页
+            MeunScene * meunScene = [[MeunScene alloc]initWithSize:self.size];
+            SKTransition * transition = [SKTransition fadeWithColor:GAMEBGCOLOR duration:BrokenTime];
+            [self.view presentScene:meunScene transition:transition];
+        }
     }
 }
 
 // 重设基础内容
-- (void)resetCheckpointContent{
-    // 刀的数量重置
-    [self.indicatorNode setIndicatorNode:_currentCheckpoint.knifes];
-    // 苹果的摆放位置
-    [self.treeringTurntable addApple:_currentCheckpoint.applesCoordinates];
+//- (void)resetCheckpointContent{
+//    // 指示器中刀的数量重置
+//    [self.indicatorNode setIndicatorNode:_currentCheckpoint.knifes];
+//    // 添加树轮
+//    [self addChild:self.treeringTurntable];
+//    [self.treeringTurntable run];
+//    // 苹果的摆放位置
+//    [self.treeringTurntable addApple:_currentCheckpoint.applesCoordinates];
+//    // 添加刀
+//    [self addNewKnifes];
+//    // 添加第一把
+//    [self addChild:[self.knifeNodeArray firstObject]];
+//}
+
+- (void)addNewKnifes{
+    for (NSInteger i = 0; i < _currentCheckpoint.knifes; i++) {
+        SKTexture * texture = [SKTexture textureWithImageNamed:[[GameTool shareManager] getChooesKnife]];
+        KnifeNode * knifeNode = [[KnifeNode alloc]initWithTexture:texture color:[UIColor clearColor] size:CGSizeMake(texture.size.width * TWScreenWidth * 0.25 / texture.size.height, TWScreenWidth * 0.25)];
+        knifeNode.position = CGPointMake(TWScreenWidth * 0.5, TW_SizeRatio(127));
+        knifeNode.anchorPoint = CGPointMake(0.5, 0);
+        [_knifeNodeArray addObject:knifeNode];
+    }
 }
 
 // 增加刀飞舞的效果
@@ -183,11 +231,13 @@
         
         
 //        [self addChild:self.gameoverNode];
-        // 跳转到首页
-//        MeunScene * meunScene = [[MeunScene alloc]initWithSize:self.size];
-//        [self.gameoverNode runAction:[SKAction fadeOutWithDuration:2.0] completion:^{
-//            [self.view presentScene:meunScene];
-//        }];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(BrokenTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // 跳转到首页
+            MeunScene * meunScene = [[MeunScene alloc]initWithSize:self.size];
+            SKTransition * transition = [SKTransition fadeWithColor:GAMEBGCOLOR duration:BrokenTime];
+            [self.view presentScene:meunScene transition:transition];
+        });
     }
     
     if (contact.bodyA.categoryBitMask == AppleCategory || contact.bodyB.categoryBitMask == AppleCategory) {
@@ -352,19 +402,19 @@
 //                    NSLog(@"全部发射完毕");
 
                     // 去掉树轮
+                    [self.treeringTurntable removeFromParent];
                     [self.treeringTurntable removeAllChildren];
                     [self.treeringTurntable removeAllActions];
-                    [self.treeringTurntable removeFromParent];
+                    
                     // 增加树轮破烂效果
                     [self addChild:self.brokenNode];
                     // 增加乱箭飞舞的效果
                     [self addKnifeFly];
                     
                     // 当前关卡完成
-                    self.currentCheckpointComplete = YES;
-                    
-                    // 移除树轮和刀，载添加
-//                    [self.treeringTurntable removeFromParent];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(BrokenTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.currentCheckpointComplete = YES;
+                    });
                 }
             }];
         }
@@ -461,12 +511,11 @@
     return _brokenNode;
 }
 
-
 #pragma mark - --------指示器--------
 - (IndicatorNode *)indicatorNode{
     if (_indicatorNode == nil) {
         _indicatorNode = [[IndicatorNode alloc]initWithColor:[UIColor clearColor] size:CGSizeMake(IndicatorNodeAllW, IndicatorNodeAllH)];
-        _indicatorNode.position = CGPointMake(TWScreenWidth * 0.6, IndicatorNodeOneH);
+        _indicatorNode.position = CGPointMake(TWScreenWidth * 0.6, TWScreenWidth * 0.2);
     }
     return _indicatorNode;
 }

@@ -30,6 +30,25 @@ static GameTool * tool;
     return array[number];
 }
 
+// 保存总关卡数
+- (void)saveCheckpointCount:(NSInteger)count{
+    [[NSUserDefaults standardUserDefaults] setInteger:count forKey:AllCheckpointNumber];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+// 获取总关卡数
+- (NSInteger)getCheckpointCount{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:AllCheckpointNumber];
+}
+
+- (void)saveCheckpointNumber:(NSInteger)number{
+    [[NSUserDefaults standardUserDefaults] setInteger:number forKey:CheckpointNumber];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSInteger)getCheckpointNumber{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:CheckpointNumber];
+}
+
 - (void)saveCheckpoint:(NSArray <Checkpoint *>*)checkArray{
     NSMutableArray * array = [NSMutableArray array];
     for (Checkpoint * point in checkArray) {

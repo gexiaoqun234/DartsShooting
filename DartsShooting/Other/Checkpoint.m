@@ -62,6 +62,6 @@ CGFloat arc(CGFloat angle) {
 }
 
 - (NSString *)description{
-    return [NSString stringWithFormat:@"当前是第%ld关，可以发射的刀有%ld把，可以获取%ld个苹果，苹果的坐标数组为%@",(long)_checkpointCount,_knifes,_apples,_applesCoordinates];
+    return [NSString stringWithFormat:@"第%ld关，刀有%ld把，苹果有%ld个",(long)_checkpointCount,(long)_knifes,(long)_apples];
 }
 @end

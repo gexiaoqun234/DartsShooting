@@ -58,7 +58,8 @@ NSString * const CurrentScore = @"CurrentScore";// 当前得分
 NSString * const WhichKnife = @"WhichKnife";//选中的哪一把到
 NSString * const UnlockKnifeArray = @"UnlockKnifeArray";//已经解锁的刀的数组
 NSString * const CheckpointString = @"CheckpointString";
-
+NSString * const CheckpointNumber = @"CheckpointNumber";//关卡数
+NSString * const AllCheckpointNumber = @"AllCheckpointNumber";//总关卡数
 
 NSString * const CoordinatesX = @"CoordinatesX";
 NSString * const CoordinatesY = @"CoordinatesY";

@@ -65,6 +65,8 @@ UIKIT_EXTERN NSString * const CurrentScore;// 当前得分
 UIKIT_EXTERN NSString * const WhichKnife;//选中的哪一把到
 UIKIT_EXTERN NSString * const UnlockKnifeArray;//已经解锁的刀的数组
 UIKIT_EXTERN NSString * const CheckpointString;// 关卡字符串
+UIKIT_EXTERN NSString * const CheckpointNumber;
+UIKIT_EXTERN NSString * const AllCheckpointNumber;//总关卡
 
 UIKIT_EXTERN NSString * const CoordinatesX;
 UIKIT_EXTERN NSString * const CoordinatesY;

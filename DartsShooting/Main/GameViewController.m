@@ -31,37 +31,15 @@
     if (isFirst) {
 //        NSLog(@"不是第一次开启");
     } else {
-//        NSLog(@"第一次开启，设置初始值");
+//        NSLog(@"第一次开启设置初始值");
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:IsFirst];
         [[GameTool shareManager] saveBestScore:0];
         [[GameTool shareManager] saveGameMoney:0];
         [[GameTool shareManager] saveChooesKnife:DefaultKnife];
         [[GameTool shareManager] saveCurrentScore:0];
         [[GameTool shareManager] saveUnlockKnife:@""];
-        [self initializeData];
+        [[GameTool shareManager] saveCheckpointNumber:1];
     }
-}
-
-- (void)initializeData{
-    
-    // 创建第一个关卡的数据内容
-    Checkpoint * one = [[Checkpoint alloc]init];
-    one.checkpointCount = 1;
-    one.knifes = 5;
-    one.apples = 1;
-//    one.applesCoordinates = @[@{@"x":[NSString stringWithFormat:@"%.2f",TWScreenWidth * 0.25],@"y":@(0)}];
-
-    // 创建第二个关卡的数据内容
-    Checkpoint * two = [[Checkpoint alloc]init];
-    two.checkpointCount = 2;
-    two.knifes = 10;
-    two.apples = 3;
-    //    one.applesCoordinates = @[@{@"x":[NSString stringWithFormat:@"%.2f",TWScreenWidth * 0.25],@"y":@(0)}];
-    
-    NSMutableArray * dataArray = [NSMutableArray arrayWithCapacity:10];
-    [dataArray addObject:one];
-    [dataArray addObject:two];
-    [[GameTool shareManager] saveCheckpoint:dataArray];
 }
 
 

@@ -61,8 +61,18 @@
 - (NSMutableArray<SKAction *> *)actionArray{
     if (_actionArray == nil) {
         _actionArray = [NSMutableArray array];
-        
-        
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 1.13 duration:2.9]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.15 duration:0.3]];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.8 duration:1.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.3 duration:3.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 1.3 duration:4.5]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.8 duration:5.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.4 duration:1.5]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.3 duration:2.5]];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 1.3 duration:5]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.5 duration:3.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.6 duration:1.0]];
+        [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 0.8 duration:4.0]];
         [_actionArray addObject:[SKAction rotateByAngle:M_PI * 3 duration:10.0]];
         [_actionArray addObject:[SKAction rotateByAngle:-M_PI * 1.5 duration:5.0]];
         [_actionArray addObject:[SKAction rotateByAngle:M_PI * 0.3 duration:2.0]];

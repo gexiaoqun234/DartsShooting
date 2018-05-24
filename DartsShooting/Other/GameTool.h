@@ -18,6 +18,15 @@
 // 保存关卡
 - (void)saveCheckpoint:(NSArray <Checkpoint *>*)checkArray;
 
+// 保存总关卡数
+- (void)saveCheckpointCount:(NSInteger)count;
+// 获取总关卡数
+- (NSInteger)getCheckpointCount;
+
+// 保存第几关
+- (void)saveCheckpointNumber:(NSInteger)number;
+- (NSInteger)getCheckpointNumber;
+
 // 获取游戏币
 - (NSInteger)getGameMoney;
 - (void)saveGameMoney:(NSInteger)money;

@@ -54,9 +54,42 @@
     [self addChild:self.highestScoreLabel];
     [self addChild:self.lastScore];
     [self addChild:self.toolNode];
+}
+
+
+// 重置关卡
+- (void)initializeData{
+    NSMutableArray * dataArray = [NSMutableArray arrayWithCapacity:10];
+    for (NSInteger i = 0; i < CheckpointCount; i++) {
+        Checkpoint * point = [[Checkpoint alloc]init];
+        point.checkpointCount = 1 + i;
+        if (i > (CheckpointCount - 10)) {
+            point.knifes = arc4random() % 19 + 2;
+            point.apples = arc4random() % 6;
+        } else if (i > (CheckpointCount - 20)) {
+            point.knifes = arc4random() % 16 + 2;
+            point.apples = arc4random() % 6 + 1;
+        } else if (i > (CheckpointCount - 30)) {
+            point.knifes = arc4random() % 13 + 1;
+            point.apples = arc4random() % 4 + 1;
+        } else if (i > (CheckpointCount - 40)) {
+            point.knifes = arc4random() % 10 + 1;
+            point.apples = arc4random() % 2 + 1;
+        } else {
+            point.knifes = arc4random() % 7 + 1;
+            point.apples = arc4random() % 2;
+        }
+        [dataArray addObject:point];
+//        NSLog(@"%@",point.description);
+    }
+    [[GameTool shareManager] saveCheckpoint:dataArray];
     
-    
-    
+    // 每次开启重置当前分数
+    [[GameTool shareManager] saveCurrentScore:0];
+    // 保存总关卡数
+    [[GameTool shareManager] saveCheckpointCount:CheckpointCount];
+    // 当前关卡清到1
+    [[GameTool shareManager] saveCheckpointNumber:1];
 }
 
 
@@ -67,9 +100,10 @@
     SKSpriteNode * node = (SKSpriteNode *)[self nodeAtPoint:positionInScene];
     if ([node.name isEqualToString:LockNode]) return;
     if ([node.name isEqualToString:StartName]){
+        [self initializeData];
         GameScene * gameScene = [[GameScene alloc]initWithSize:self.size];
         gameScene.showMusic = _showMusic;
-        SKTransition * transition = [SKTransition revealWithDirection:(SKTransitionDirectionLeft) duration:1];
+        SKTransition * transition = [SKTransition fadeWithColor:GAMEBGCOLOR duration:BrokenTime];
         [self.view presentScene:gameScene transition:transition];
     } else if ([node.name isEqualToString:Music]){
         if (!_showMusic) {
