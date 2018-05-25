@@ -68,6 +68,8 @@ UIKIT_EXTERN NSString * const CheckpointString;// 关卡字符串
 UIKIT_EXTERN NSString * const CheckpointNumber;
 UIKIT_EXTERN NSString * const AllCheckpointNumber;//总关卡
 
+UIKIT_EXTERN NSString * const MusicState;
+
 UIKIT_EXTERN NSString * const CoordinatesX;
 UIKIT_EXTERN NSString * const CoordinatesY;
 UIKIT_EXTERN NSString * const CoordinatesZRotation;

@@ -216,6 +216,9 @@
         [(KnifeNode *)contact.bodyA.node removeAllActions];
         [(KnifeNode *)contact.bodyB.node removeAllActions];
         
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"hitKnife.mp3" waitForCompletion:YES]];
+        }
         
         // 刀碰撞的效果
         [self.tuckedInEmitter setHidden:YES];
@@ -229,6 +232,8 @@
         [[GameTool shareManager] saveCurrentScore:_currentScore];
         [[GameTool shareManager] saveBestScore:_currentScore];
         
+        // 不让继续点击屏幕了
+        _allRotate = YES;
         
 //        [self addChild:self.gameoverNode];
         
@@ -254,6 +259,10 @@
         [self.knifeBrokenEmitter setHidden:YES];
         [self.appleShootingEmitter setHidden:NO];
         [self.appleShootingEmitter resetSimulation];
+        
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"success.mp3" waitForCompletion:YES]];
+        }
         
         // 增加游戏币
         _appleCount++;
@@ -281,12 +290,18 @@
     CGPoint positionInScene = [touch locationInNode:self];
     SKSpriteNode * node = (SKSpriteNode *)[self nodeAtPoint:positionInScene];
     if ([node.name isEqualToString:Pause]) {
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
+        }
         [self.treeringTurntable stop];
         if (_allRotate == NO) {
             [self.knifeNodeArray[0] stop];
         }
         [self addChild:self.maskNode];
     } else if ([node.name isEqualToString:Continue]) {
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
+        }
         [self.treeringTurntable run];
         if (_allRotate == NO) {
             [self.knifeNodeArray[0] run];
@@ -296,10 +311,24 @@
         [[GameTool shareManager] saveCurrentScore:_currentScore];
         [[GameTool shareManager] saveBestScore:_currentScore];
         MeunScene * meunScene = [[MeunScene alloc]initWithSize:self.size];
-        [self.view presentScene:meunScene];
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.view presentScene:meunScene];
+            });
+        } else {
+            [self.view presentScene:meunScene];
+        }
+    } else if ([node.name isEqualToString:@"maskNode"]){
+           return;
     } else {
         // 点击发射刀
         if (_allRotate == NO) {
+            
+            if ([[GameTool shareManager] getMusicState]) {
+                [self runAction:[SKAction playSoundFileNamed:@"shooting.mp3" waitForCompletion:YES]];
+            }
+            
             [self.knifeNodeArray[0] runAction:[SKAction moveTo:CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.7 - (TWScreenWidth * 0.5) * 0.5 - TW_SizeRatio(74) * 0.8) duration:0.2] completion:^{
                 
                 [self.tuckedInEmitter setHidden:NO];
@@ -310,7 +339,7 @@
                 [self.knifeNodeArray[0] removeFromParent];
                 
                 
-                // 不需要管越界，因为发射完旧不会进到这里
+                // 不需要管越界，因为发射完就不会进到这里
                 self.shootKnife++;
                 //计数器减1
                 [self.indicatorNode resetIndicatorNodeAllCount:self.currentCheckpoint.knifes userCount:self.shootKnife];
@@ -393,6 +422,11 @@
                 self.currentScore++;
                 self.scoreLabel.text = [NSString stringWithFormat:@"%ld",(long)self.currentScore];
 
+                
+                if ([[GameTool shareManager] getMusicState]) {
+                    [self runAction:[SKAction playSoundFileNamed:@"broken.mp3" waitForCompletion:YES]];
+                }
+                
                 // 保存当前得分
                 [[GameTool shareManager] saveCurrentScore:self.currentScore];
                 [[GameTool shareManager] saveBestScore:self.currentScore];
@@ -405,6 +439,10 @@
                     [self.treeringTurntable removeFromParent];
                     [self.treeringTurntable removeAllChildren];
                     [self.treeringTurntable removeAllActions];
+                    
+                    if ([[GameTool shareManager] getMusicState]) {
+                        [self runAction:[SKAction playSoundFileNamed:@"broken11.mp3" waitForCompletion:YES]];
+                    }
                     
                     // 增加树轮破烂效果
                     [self addChild:self.brokenNode];
@@ -464,6 +502,7 @@
     if (_maskNode == nil) {
         _maskNode = [SKSpriteNode spriteNodeWithColor:[UIColor colorWithWhite:0 alpha:0.7] size:self.size];
         _maskNode.position = CGPointMake(TWScreenWidth * 0.5, TWScreenHeight * 0.5);
+        _maskNode.name = @"maskNode";
         _maskNode.zPosition = MaskBGzposition;
         [_maskNode addChild:self.continueNode];
         [_maskNode addChild:self.homeNode];

@@ -32,6 +32,14 @@
 		FFB3165B20B516F000B49EAB /* BrokenNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB3165A20B516F000B49EAB /* BrokenNode.m */; };
 		FFB3166520B5540A00B49EAB /* KnifeBroken.sks in Resources */ = {isa = PBXBuildFile; fileRef = FFB3166320B5540A00B49EAB /* KnifeBroken.sks */; };
 		FFB3166920B55E9100B49EAB /* AppleNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB3166820B55E9100B49EAB /* AppleNode.m */; };
+		FFBC85C720B7A2F00075EC79 /* choose.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85C420B7A2EF0075EC79 /* choose.mp3 */; };
+		FFBC85C820B7A2F00075EC79 /* clickVoide.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85C520B7A2F00075EC79 /* clickVoide.mp3 */; };
+		FFBC85C920B7A2F00075EC79 /* lost.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85C620B7A2F00075EC79 /* lost.mp3 */; };
+		FFBC85CC20B7AF510075EC79 /* shooting.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85CA20B7AF500075EC79 /* shooting.mp3 */; };
+		FFBC85CD20B7AF510075EC79 /* broken.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85CB20B7AF500075EC79 /* broken.mp3 */; };
+		FFBC85CF20B7B06B0075EC79 /* broken11.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85CE20B7B06B0075EC79 /* broken11.mp3 */; };
+		FFBC85D120B7B1320075EC79 /* hitKnife.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85D020B7B1320075EC79 /* hitKnife.mp3 */; };
+		FFBC85D320B7B19B0075EC79 /* success.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FFBC85D220B7B19B0075EC79 /* success.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +89,14 @@
 		FFB3166320B5540A00B49EAB /* KnifeBroken.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = KnifeBroken.sks; sourceTree = "<group>"; };
 		FFB3166720B55E9100B49EAB /* AppleNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleNode.h; sourceTree = "<group>"; };
 		FFB3166820B55E9100B49EAB /* AppleNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppleNode.m; sourceTree = "<group>"; };
+		FFBC85C420B7A2EF0075EC79 /* choose.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = choose.mp3; sourceTree = "<group>"; };
+		FFBC85C520B7A2F00075EC79 /* clickVoide.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clickVoide.mp3; sourceTree = "<group>"; };
+		FFBC85C620B7A2F00075EC79 /* lost.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lost.mp3; sourceTree = "<group>"; };
+		FFBC85CA20B7AF500075EC79 /* shooting.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shooting.mp3; sourceTree = "<group>"; };
+		FFBC85CB20B7AF500075EC79 /* broken.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = broken.mp3; sourceTree = "<group>"; };
+		FFBC85CE20B7B06B0075EC79 /* broken11.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = broken11.mp3; sourceTree = "<group>"; };
+		FFBC85D020B7B1320075EC79 /* hitKnife.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hitKnife.mp3; sourceTree = "<group>"; };
+		FFBC85D220B7B19B0075EC79 /* success.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = success.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +113,14 @@
 		FF5D2CC620B2646D00C660D3 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				FFBC85D220B7B19B0075EC79 /* success.mp3 */,
+				FFBC85D020B7B1320075EC79 /* hitKnife.mp3 */,
+				FFBC85CE20B7B06B0075EC79 /* broken11.mp3 */,
+				FFBC85CB20B7AF500075EC79 /* broken.mp3 */,
+				FFBC85CA20B7AF500075EC79 /* shooting.mp3 */,
+				FFBC85C420B7A2EF0075EC79 /* choose.mp3 */,
+				FFBC85C520B7A2F00075EC79 /* clickVoide.mp3 */,
+				FFBC85C620B7A2F00075EC79 /* lost.mp3 */,
 				FF5D2CC720B2646D00C660D3 /* 309.TTF */,
 			);
 			path = Resource;
@@ -268,11 +292,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF6D3D9B20A91F6100806197 /* Main.storyboard in Resources */,
+				FFBC85C720B7A2F00075EC79 /* choose.mp3 in Resources */,
 				FFB3166520B5540A00B49EAB /* KnifeBroken.sks in Resources */,
 				FF6D3DD720A9662C00806197 /* AppleShooting.sks in Resources */,
 				FF6D3D9D20A91F6300806197 /* Assets.xcassets in Resources */,
+				FFBC85CD20B7AF510075EC79 /* broken.mp3 in Resources */,
 				FF5D2CC820B2646D00C660D3 /* 309.TTF in Resources */,
+				FFBC85D320B7B19B0075EC79 /* success.mp3 in Resources */,
+				FFBC85C920B7A2F00075EC79 /* lost.mp3 in Resources */,
+				FFBC85C820B7A2F00075EC79 /* clickVoide.mp3 in Resources */,
 				FF6D3DA020A91F6300806197 /* LaunchScreen.storyboard in Resources */,
+				FFBC85CC20B7AF510075EC79 /* shooting.mp3 in Resources */,
+				FFBC85CF20B7B06B0075EC79 /* broken11.mp3 in Resources */,
+				FFBC85D120B7B1320075EC79 /* hitKnife.mp3 in Resources */,
 				FF963A1920AD629C0025674C /* TuckedIn.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

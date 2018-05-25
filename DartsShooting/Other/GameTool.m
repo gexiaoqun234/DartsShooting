@@ -20,6 +20,15 @@ static GameTool * tool;
     return tool;
 }
 
+- (void)saveMusicState:(BOOL)state{
+    [[NSUserDefaults standardUserDefaults] setBool:state forKey:MusicState];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (BOOL)getMusicState{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:MusicState];
+}
+
 - (Checkpoint *)getCheckpoint:(NSInteger)number{
     NSMutableArray * array = [NSMutableArray array];
     NSArray * dataArray = [[NSUserDefaults standardUserDefaults] objectForKey:CheckpointString];

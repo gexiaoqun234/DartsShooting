@@ -14,7 +14,7 @@
     if (self = [super initWithTexture:texture color:color size:size]) {
         [self run];
         // 物理属性
-        self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(size.width * 0.4, size.height * 0.5)];
+        self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(size.width * 0.8, size.height * 0.5)];
         self.physicsBody.categoryBitMask = KnifeCategory;
         self.physicsBody.affectedByGravity = NO;
         self.physicsBody.contactTestBitMask = TreeringTurntableCategory | KnifeCategory | AppleCategory;

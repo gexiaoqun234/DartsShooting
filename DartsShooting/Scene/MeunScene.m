@@ -25,7 +25,6 @@
 @property (nonatomic, strong) SKAction * fadeAction;
 @property (nonatomic, strong) SKSpriteNode * toolNode;
 @property (nonatomic, strong) SKSpriteNode * musicNode;
-@property (nonatomic, assign) BOOL showMusic;
 @property (nonatomic, strong) SKSpriteNode * buyNode;
 
 // 蒙版背景
@@ -44,7 +43,6 @@
 
 - (void)didMoveToView:(SKView *)view{
     [super didMoveToView:view];
-    _showMusic = YES;
     self.backgroundColor = GAMEBGCOLOR;
     [self addChild:[BackgroundNode initializeBackgroundNode]];
     [self addChild:self.treeringTurntable];
@@ -92,7 +90,6 @@
     [[GameTool shareManager] saveCheckpointNumber:1];
 }
 
-
 #pragma mark - --------点击事件--------
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     UITouch * touch = [touches anyObject];
@@ -101,51 +98,67 @@
     if ([node.name isEqualToString:LockNode]) return;
     if ([node.name isEqualToString:StartName]){
         [self initializeData];
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
+        }
         GameScene * gameScene = [[GameScene alloc]initWithSize:self.size];
-        gameScene.showMusic = _showMusic;
         SKTransition * transition = [SKTransition fadeWithColor:GAMEBGCOLOR duration:BrokenTime];
         [self.view presentScene:gameScene transition:transition];
     } else if ([node.name isEqualToString:Music]){
-        if (!_showMusic) {
+        BOOL showMusic = [[GameTool shareManager] getMusicState];
+        if (!showMusic) {
+            [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
             self.musicNode.texture = [SKTexture textureWithImageNamed:@"soundbtn-sheet0"];
-            _showMusic = NO;
+            [[GameTool shareManager] saveMusicState:YES];
         } else {
+            // 不显示音乐
             self.musicNode.texture = [SKTexture textureWithImageNamed:@"soundbtn-sheet1"];
-            _showMusic = YES;
+            [[GameTool shareManager] saveMusicState:NO];
         }
-        _showMusic = !_showMusic;
+        showMusic = !showMusic;
     } else if ([node.name isEqualToString:Buy]){
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
+        }
         [self addChild:self.maskNode];
     } else {
         
 #pragma mark - --------点击关闭蒙版--------
         if ([node.name isEqualToString:BackNode]) {
             // 保存下选中的
-            if ([self.chooesNode.parent.name isEqualToString:DefaultKnife]) {
-                [[GameTool shareManager] saveChooesKnife:DefaultKnife];
-            }else if ([self.chooesNode.parent.name isEqualToString:OneKnife]){
-                [[GameTool shareManager] saveChooesKnife:OneKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:TwoKnife]){
-                [[GameTool shareManager] saveChooesKnife:TwoKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:ThreeKnife]){
-                [[GameTool shareManager] saveChooesKnife:ThreeKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:FourKnife]){
-                [[GameTool shareManager] saveChooesKnife:FourKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:FiveKnife]){
-                [[GameTool shareManager] saveChooesKnife:FiveKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:SixKnife]){
-                [[GameTool shareManager] saveChooesKnife:SixKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:SevenKnife]){
-                [[GameTool shareManager] saveChooesKnife:SevenKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:EightKnife]){
-                [[GameTool shareManager] saveChooesKnife:EightKnife];
-            } else if ([self.chooesNode.parent.name isEqualToString:NineKnife]){
-                [[GameTool shareManager] saveChooesKnife:NineKnife];
+//            if ([self.chooesNode.parent.name isEqualToString:DefaultKnife]) {
+//                [[GameTool shareManager] saveChooesKnife:DefaultKnife];
+//            }else if ([self.chooesNode.parent.name isEqualToString:OneKnife]){
+//                [[GameTool shareManager] saveChooesKnife:OneKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:TwoKnife]){
+//                [[GameTool shareManager] saveChooesKnife:TwoKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:ThreeKnife]){
+//                [[GameTool shareManager] saveChooesKnife:ThreeKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:FourKnife]){
+//                [[GameTool shareManager] saveChooesKnife:FourKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:FiveKnife]){
+//                [[GameTool shareManager] saveChooesKnife:FiveKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:SixKnife]){
+//                [[GameTool shareManager] saveChooesKnife:SixKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:SevenKnife]){
+//                [[GameTool shareManager] saveChooesKnife:SevenKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:EightKnife]){
+//                [[GameTool shareManager] saveChooesKnife:EightKnife];
+//            } else if ([self.chooesNode.parent.name isEqualToString:NineKnife]){
+//                [[GameTool shareManager] saveChooesKnife:NineKnife];
+//            }
+            
+            if ([[GameTool shareManager] getMusicState]) {
+                [self runAction:[SKAction playSoundFileNamed:@"clickVoide.mp3" waitForCompletion:YES]];
             }
+            [[GameTool shareManager] saveChooesKnife:self.chooesNode.parent.name];
             [self.titleNode resetTitleNodeTexture];
             // 然后再关闭
             [self.maskNode removeFromParent];
         } else if ([node.name isEqualToString:@"ChooesNode"]){
+            if ([[GameTool shareManager] getMusicState]) {
+                [self runAction:[SKAction playSoundFileNamed:@"choose.mp3" waitForCompletion:YES]];
+            }
             // 重复点击，直接返回
             return;
         
@@ -216,6 +229,10 @@
 }
 
 - (void)unlockState:(SKSpriteNode *)node{
+    if ([[GameTool shareManager] getMusicState]) {
+        [self runAction:[SKAction playSoundFileNamed:@"choose.mp3" waitForCompletion:YES]];
+    }
+    
     // 添加选择背景
     [self.chooesNode removeFromParent];
     [node addChild:self.chooesNode];
@@ -232,6 +249,12 @@
     
     NSInteger money = [[GameTool shareManager] getGameMoney];
     if (money >= 10) {
+        
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"choose.mp3" waitForCompletion:YES]];
+        }
+        
+        
         // 1扣钱
         money -= 10;
         // 2解锁
@@ -245,6 +268,12 @@
         // 5显示新的余额
         self.appleCountNode.text = [NSString stringWithFormat:@"%ld",(long)money];
     } else {
+        
+        if ([[GameTool shareManager] getMusicState]) {
+            [self runAction:[SKAction playSoundFileNamed:@"lost.mp3" waitForCompletion:YES]];
+        }
+        
+        
         // 提示钱不够
         [self.maskNode addChild:self.tipNode];
         __weak typeof(self) weakSelf = self;
@@ -455,7 +484,13 @@
 
 - (SKSpriteNode *)musicNode{
     if (_musicNode == nil) {
-        _musicNode = [[SKSpriteNode alloc]initWithTexture:[SKTexture textureWithImageNamed:@"soundbtn-sheet0"]];
+        SKTexture * texture;
+        if ([[GameTool shareManager] getMusicState]) {
+            texture = [SKTexture textureWithImageNamed:@"soundbtn-sheet0"];
+        } else {
+            texture = [SKTexture textureWithImageNamed:@"soundbtn-sheet1"];
+        }
+        _musicNode = [[SKSpriteNode alloc]initWithTexture:texture];
         _musicNode.size = CGSizeMake(TWScreenWidth * 0.2, TWScreenWidth * 0.2);
         _musicNode.name = Music;
         _musicNode.zPosition = Startzposition;

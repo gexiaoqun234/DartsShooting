@@ -13,6 +13,9 @@
 
 + (instancetype)shareManager;
 
+- (void)saveMusicState:(BOOL)state;
+- (BOOL)getMusicState;
+
 // 获取第几个关卡的数据
 - (Checkpoint *)getCheckpoint:(NSInteger)number;
 // 保存关卡

@@ -34,11 +34,12 @@
 //        NSLog(@"第一次开启设置初始值");
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:IsFirst];
         [[GameTool shareManager] saveBestScore:0];
-        [[GameTool shareManager] saveGameMoney:0];
+        [[GameTool shareManager] saveGameMoney:100];
         [[GameTool shareManager] saveChooesKnife:DefaultKnife];
         [[GameTool shareManager] saveCurrentScore:0];
         [[GameTool shareManager] saveUnlockKnife:@""];
         [[GameTool shareManager] saveCheckpointNumber:1];
+        [[GameTool shareManager] saveMusicState:YES];
     }
 }
 

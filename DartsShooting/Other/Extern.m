@@ -61,6 +61,8 @@ NSString * const CheckpointString = @"CheckpointString";
 NSString * const CheckpointNumber = @"CheckpointNumber";//关卡数
 NSString * const AllCheckpointNumber = @"AllCheckpointNumber";//总关卡数
 
+NSString * const MusicState = @"MusicState";
+
 NSString * const CoordinatesX = @"CoordinatesX";
 NSString * const CoordinatesY = @"CoordinatesY";
 NSString * const CoordinatesZRotation = @"CoordinatesZRotation";
